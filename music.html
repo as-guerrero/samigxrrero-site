@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>music · samigxrrero</title>
 <meta name="description" content="music by Samí Guerrero.">
-<link rel="stylesheet" href="styles.css?v=20261025x">
+<link rel="stylesheet" href="styles.css?v=20261026y">
 </head>
 <body>
 
@@ -52,10 +52,6 @@
 
   <footer id="contact" class="site-footer">
     <a href="contact.html">commissions and collabs</a>
-    <div class="nav">
-      <a href="https://www.instagram.com/samigxrrero" target="_blank" rel="noopener">instagram</a>
-      <a href="https://www.youtube.com/@samigxrrero" target="_blank" rel="noopener">youtube</a>
-    </div>
   </footer>
 
 </div>
@@ -73,9 +69,11 @@
   fetch('https://itunes.apple.com/lookup?id=6800396577&entity=song&limit=200&country=us')
     .then(function (r) { return r.json(); })
     .then(function (data) {
-      var known = {};
+      var known = {}, live = {};
       tracks.forEach(function (t) { known[t.title.toLowerCase()] = t; });
-      var fresh = (data.results || [])
+      var songs = (data.results || []).filter(function (r) { return r.wrapperType === 'track'; });
+      songs.forEach(function (r) { live[r.trackName.toLowerCase()] = true; });
+      var fresh = songs
         .filter(function (r) { return r.wrapperType === 'track' && r.previewUrl; })
         .sort(function (a, b) { return new Date(b.releaseDate) - new Date(a.releaseDate); })
         .filter(function (r) {
@@ -86,10 +84,13 @@
         .map(function (r) {
           return { title: r.trackName, apple: r.trackViewUrl, spotify: SPOTIFY_ARTIST, preview: r.previewUrl };
         });
-      if (!fresh.length) return;
+      // songs taken off Apple Music drop off here too (only when Apple answered with a real list)
+      var kept = songs.length ? tracks.filter(function (t) { return live[t.title.toLowerCase()]; }) : tracks;
+      if (!fresh.length && kept.length === tracks.length) return;
       var current = tracks[i];
-      tracks = fresh.concat(tracks);
-      if (audio.paused && !audio.src) i = 0; else i = tracks.indexOf(current);
+      tracks = fresh.concat(kept);
+      if (!tracks.length) return;
+      if (audio.paused && !audio.src) i = 0; else i = Math.max(0, tracks.indexOf(current));
       document.getElementById('total').textContent = tracks.length;
       show();
     })
@@ -137,6 +138,6 @@
   show();
 })();
 </script>
-<script src="site.js?v=20261025t"></script>
+<script src="site.js?v=20261026v"></script>
 </body>
 </html>

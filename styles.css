@@ -12,6 +12,9 @@
 
 html { scroll-behavior: smooth; }
 
+/* nothing on the page may push it wider than the screen, so phones only scroll up and down */
+html { overflow-x: hidden; overscroll-behavior-x: none; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
 body {
   margin: 0;
   overflow-x: clip;
@@ -229,24 +232,14 @@ button.btn { background: none; color: var(--fg); font: inherit; font-size: 14px;
 .home-bg video { width: 100%; height: 100%; object-fit: cover; opacity: .32; }
 .home-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(11, 11, 11, .55), rgba(11, 11, 11, 0) 22%, rgba(11, 11, 11, 0) 78%, rgba(11, 11, 11, .55)); }
 .home > section { position: relative; z-index: 1; }
-@media (prefers-reduced-motion: reduce) { .home-bg video { display: none; } }
+/* with Reduce Motion on, show a still frame instead of the moving clip */
+@media (prefers-reduced-motion: reduce) {
+  .home-bg video { display: none; }
+  .home-bg::before { content: ""; position: absolute; inset: 0; background: url(img/home-loop-poster.jpg) center / cover no-repeat; opacity: .32; }
+}
 .home-hero { padding: clamp(48px, 10vh, 120px) 0 clamp(120px, 16vw, 240px); }
 .hero-name { display: flex; flex-direction: column; align-items: flex-start; font-size: clamp(64px, 14vw, 220px); letter-spacing: -.015em; }
 .hero-name span:last-child { align-self: flex-end; }
-/* mirror: each word flips right under itself at the same size and fades out */
-.mirror { position: relative; }
-.hero-reflect { position: absolute; top: 50%; left: 0; right: 0; margin: 0; opacity: var(--m, 0); pointer-events: none; user-select: none; transition: opacity .5s ease; }
-/* extra padding (cancelled by the negative margin) gives the fade room, so the g's tail isn't clipped */
-.hero-reflect span { padding: .3em 0; margin: -.3em 0; transform: scaleY(-1);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 22%, rgba(0, 0, 0, .35) 50%, #000 78%);
-  mask-image: linear-gradient(to bottom, transparent 22%, rgba(0, 0, 0, .35) 50%, #000 78%); }
-/* "gxrrero" sits a touch lower so its g tail clears the real g, keeping the same look as "sami" */
-.hero-reflect span:last-child { margin-top: -.24em; }
-/* only when the pointer is on the letters themselves, not the empty space around them */
-@media (hover: hover) { .mirror:has(h1 span:hover) { --m: .35; } }
-/* phones (no hover): the reflection fades in on its own shortly after the page opens */
-@media (hover: none) { .hero-reflect { opacity: .35; animation: mirror-in 1.4s ease .6s both; } }
-@keyframes mirror-in { from { opacity: 0; } }
 
 /* shop: price on hover */
 @media (hover: hover) {
@@ -347,7 +340,7 @@ a.row:hover { background: #141414; padding-left: 16px; }
 /* header stays visible while scrolling */
 .site-header { position: sticky; top: 0; z-index: 20; }
 /* full-width band behind the header without widening the page (shadow + clip trick) */
-.site-header::before { content: ""; position: absolute; inset: 0; z-index: -1; background: rgba(11, 11, 11, .82); box-shadow: 0 0 0 100vmax rgba(11, 11, 11, .82); clip-path: inset(0 -100vmax); }
+.site-header::before { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%); z-index: -1; background: rgba(11, 11, 11, .82); }
 
 /* back to top: shows up once you've scrolled down a long page */
 .to-top { position: fixed; right: clamp(16px, 3vw, 32px); bottom: clamp(16px, 3vw, 32px); z-index: 30; min-height: 44px; padding: 0 18px; border: 1px solid rgba(232, 232, 230, .5); background: rgba(11, 11, 11, .7); color: var(--fg); font: inherit; font-size: 13px; cursor: pointer; opacity: 0; pointer-events: none; transition: opacity .4s ease, border-color .4s ease; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
@@ -364,3 +357,29 @@ a.row:hover { background: #141414; padding-left: 16px; }
   .site-header .nav { gap: 10px; }
 }
 @media (max-width: 560px) { .about-bio { font-size: 16px; line-height: 1.6; } }
+
+/* touch screens: no hover lifts or wobbles (a tap leaves :hover stuck on phones) */
+@media (hover: none) {
+  .tile:hover, .tape:hover, .biglink:hover, .wave:hover,
+  .tile.deck:hover .deck-img img, .tile.zine:hover .zine-img img,
+  .more:hover .arrow, .world:hover .arrow, .row:hover .arrow { transform: none; text-shadow: none; }
+}
+
+/* phones: one column that fits the screen, calmer spacing, footer link centered */
+@media (max-width: 560px) {
+  .wrap { padding: 0 20px; }
+  .site-footer { justify-content: center; text-align: center; padding: 36px 0 44px; }
+  .section { padding: 48px 0; }
+  .collection-intro { padding: 72px 0 56px; gap: 20px; }
+  .cat { padding: 56px 0 0; }
+  .videos { gap: 48px; padding: 40px 0 88px; }
+  .photos { padding: 16px 0 88px; }
+  .music { padding: 56px 0 96px; }
+  .contact { gap: 40px; padding: 16px 0 96px; }
+  .contact-row { flex-direction: column; align-items: flex-start; padding: 24px 0; }
+  .about-page { gap: 28px; padding: 40px 0 96px; }
+  .fdn { gap: 64px; padding: 16px 0 88px; }
+  .cta { padding: 72px 0; }
+  .design-page { padding: 16px 0 88px; }
+  .work-list { padding: 56px 0 96px; }
+}

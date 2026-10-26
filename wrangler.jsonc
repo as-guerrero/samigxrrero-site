@@ -1,0 +1,10 @@
+// Cloudflare deploy settings: serve this folder as a static site on the "lakemane" Worker.
+{
+  "name": "lakemane",
+  "compatibility_date": "2026-10-25",
+  "assets": {
+    "directory": "./"
+  },
+  // needed for Cloudflare's preview builds on pull requests
+  "previews": {}
+}

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>video · samigxrrero</title>
 <meta name="description" content="video by sami gxrrero.">
-<link rel="stylesheet" href="styles.css?v=20261025x">
+<link rel="stylesheet" href="styles.css?v=20261026y">
 </head>
 <body>
 
@@ -53,10 +53,6 @@
 
   <footer id="contact" class="site-footer">
     <a href="contact.html">commissions and collabs</a>
-    <div class="nav">
-      <a href="https://www.instagram.com/samigxrrero" target="_blank" rel="noopener">instagram</a>
-      <a href="https://www.youtube.com/@samigxrrero" target="_blank" rel="noopener">youtube</a>
-    </div>
   </footer>
 
 </div>
@@ -68,7 +64,6 @@
   var tag = document.createElement('script');
   tag.src = 'https://www.youtube.com/iframe_api';
   document.head.appendChild(tag);
-  var canHover = window.matchMedia('(hover: hover)').matches;
   var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   cards.forEach(function (card) {
@@ -77,36 +72,44 @@
 
     function start() {
       want = true;
-      if (full || preview || calm) return;
+      if (full || calm) return;
+      // already made: just rewind to the clip and keep looping
+      if (preview) {
+        if (preview.seekTo) { preview.seekTo(+card.dataset.start || 0, true); preview.playVideo(); }
+        return;
+      }
       ready.then(function () {
-        if (full || !want || preview) return;
+        if (full || preview) return;
         var host = document.createElement('div');
         host.className = 'loop';
         frame.appendChild(host);
         preview = new YT.Player(host, {
           videoId: id,
-          playerVars: { autoplay: 1, mute: 1, controls: 0, disablekb: 1, playsinline: 1, rel: 0, iv_load_policy: 3, fs: 0 },
+          playerVars: { autoplay: 1, mute: 1, controls: 0, disablekb: 1, playsinline: 1, rel: 0, iv_load_policy: 3, fs: 0, modestbranding: 1 },
           events: {
             onReady: function (e) {
               var p = e.target, s = +card.dataset.start || 0, end = +card.dataset.end || s + 6;
-              p.mute(); p.seekTo(s, true); p.playVideo();
+              p.mute(); p.seekTo(s, true);
+              if (want) p.playVideo(); else p.pauseVideo();
               timer = setInterval(function () {
+                if (!want) return;
                 var t = p.getCurrentTime();
                 if (t >= end || t < s - 1) p.seekTo(s, true);
               }, 150);
             },
-            onStateChange: function (e) { if (e.data === 1) card.classList.add('looping'); }
+            onStateChange: function (e) {
+              if (e.data === 1) card.classList.add('looping');
+              // if the clip ever stops (ended or paused by the browser) while on screen, start it again
+              if ((e.data === 0 || e.data === 2) && want) { e.target.seekTo(+card.dataset.start || 0, true); e.target.playVideo(); }
+            }
           }
         });
       });
     }
     function stop() {
       want = false;
-      if (full) return;
-      clearInterval(timer);
-      card.classList.remove('looping');
-      if (preview) { preview.destroy(); preview = null; }
-      var l = frame.querySelector('.loop'); if (l) l.remove();
+      if (full || !preview || !preview.pauseVideo) return;
+      preview.pauseVideo();
     }
     function play() {
       full = true;
@@ -118,14 +121,19 @@
       card.classList.add('playing');
     }
 
-    if (canHover) {
-      card.addEventListener('mouseenter', start);
-      card.addEventListener('mouseleave', stop);
+    // loop the chosen clip on its own whenever the video is on screen, like the homepage;
+    // stop it once it scrolls away so the page stays light on phones
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { if (en.isIntersecting) start(); else stop(); });
+      }, { rootMargin: '200px 0px', threshold: 0 }).observe(card);
+    } else {
+      start();
     }
     card.querySelector('.play').addEventListener('click', play);
   });
 })();
 </script>
-<script src="site.js?v=20261025t"></script>
+<script src="site.js?v=20261026v"></script>
 </body>
 </html>
