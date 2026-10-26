@@ -1,6 +1,6 @@
 /* shared: tap toggles for phones + the "commissions and collabs" popup */
 (function () {
-  // tap to switch (about photo, homepage mirror). Mouse hover is handled in CSS.
+  // tap to switch (about photo). Mouse hover is handled in CSS.
   document.querySelectorAll('[data-tap]').forEach(function (el) {
     el.addEventListener('click', function () { el.classList.toggle('is-on'); });
   });

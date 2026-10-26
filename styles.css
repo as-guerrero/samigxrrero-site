@@ -237,20 +237,6 @@ button.btn { background: none; color: var(--fg); font: inherit; font-size: 14px;
 .home-hero { padding: clamp(48px, 10vh, 120px) 0 clamp(120px, 16vw, 240px); }
 .hero-name { display: flex; flex-direction: column; align-items: flex-start; font-size: clamp(64px, 14vw, 220px); letter-spacing: -.015em; }
 .hero-name span:last-child { align-self: flex-end; }
-/* mirror: each word flips right under itself at the same size and fades out */
-.mirror { position: relative; }
-.hero-reflect { position: absolute; top: 50%; left: 0; right: 0; margin: 0; opacity: var(--m, 0); pointer-events: none; user-select: none; transition: opacity .5s ease; }
-/* extra padding (cancelled by the negative margin) gives the fade room, so the g's tail isn't clipped */
-.hero-reflect span { padding: .3em 0; margin: -.3em 0; transform: scaleY(-1);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 22%, rgba(0, 0, 0, .35) 50%, #000 78%);
-  mask-image: linear-gradient(to bottom, transparent 22%, rgba(0, 0, 0, .35) 50%, #000 78%); }
-/* "gxrrero" sits a touch lower so its g tail clears the real g, keeping the same look as "sami" */
-.hero-reflect span:last-child { margin-top: -.24em; }
-/* only when the pointer is on the letters themselves, not the empty space around them */
-@media (hover: hover) { .mirror:has(h1 span:hover) { --m: .35; } }
-/* phones (no hover): the reflection fades in on its own shortly after the page opens */
-@media (hover: none) { .hero-reflect { opacity: .35; animation: mirror-in 1.4s ease .6s both; } }
-@keyframes mirror-in { from { opacity: 0; } }
 
 /* shop: price on hover */
 @media (hover: hover) {
