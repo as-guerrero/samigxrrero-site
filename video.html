@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>video · samigxrrero</title>
 <meta name="description" content="video by sami gxrrero.">
-<link rel="stylesheet" href="styles.css?v=20261026w">
+<link rel="stylesheet" href="styles.css?v=20261026x">
 </head>
 <body>
 
@@ -53,10 +53,6 @@
 
   <footer id="contact" class="site-footer">
     <a href="contact.html">commissions and collabs</a>
-    <div class="nav">
-      <a href="https://www.instagram.com/samigxrrero" target="_blank" rel="noopener">instagram</a>
-      <a href="https://www.youtube.com/@samigxrrero" target="_blank" rel="noopener">youtube</a>
-    </div>
   </footer>
 
 </div>
@@ -68,7 +64,6 @@
   var tag = document.createElement('script');
   tag.src = 'https://www.youtube.com/iframe_api';
   document.head.appendChild(tag);
-  var canHover = window.matchMedia('(hover: hover)').matches;
   var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   cards.forEach(function (card) {
@@ -118,9 +113,14 @@
       card.classList.add('playing');
     }
 
-    if (canHover) {
-      card.addEventListener('mouseenter', start);
-      card.addEventListener('mouseleave', stop);
+    // loop the chosen clip on its own whenever the video is on screen, like the homepage;
+    // stop it once it scrolls away so the page stays light on phones
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { if (en.isIntersecting) start(); else stop(); });
+      }, { threshold: 0.25 }).observe(card);
+    } else {
+      start();
     }
     card.querySelector('.play').addEventListener('click', play);
   });

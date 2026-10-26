@@ -12,6 +12,9 @@
 
 html { scroll-behavior: smooth; }
 
+/* nothing on the page may push it wider than the screen, so phones only scroll up and down */
+html { overflow-x: hidden; }
+
 body {
   margin: 0;
   overflow-x: clip;
@@ -337,7 +340,7 @@ a.row:hover { background: #141414; padding-left: 16px; }
 /* header stays visible while scrolling */
 .site-header { position: sticky; top: 0; z-index: 20; }
 /* full-width band behind the header without widening the page (shadow + clip trick) */
-.site-header::before { content: ""; position: absolute; inset: 0; z-index: -1; background: rgba(11, 11, 11, .82); box-shadow: 0 0 0 100vmax rgba(11, 11, 11, .82); clip-path: inset(0 -100vmax); }
+.site-header::before { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%); z-index: -1; background: rgba(11, 11, 11, .82); }
 
 /* back to top: shows up once you've scrolled down a long page */
 .to-top { position: fixed; right: clamp(16px, 3vw, 32px); bottom: clamp(16px, 3vw, 32px); z-index: 30; min-height: 44px; padding: 0 18px; border: 1px solid rgba(232, 232, 230, .5); background: rgba(11, 11, 11, .7); color: var(--fg); font: inherit; font-size: 13px; cursor: pointer; opacity: 0; pointer-events: none; transition: opacity .4s ease, border-color .4s ease; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
@@ -354,3 +357,21 @@ a.row:hover { background: #141414; padding-left: 16px; }
   .site-header .nav { gap: 10px; }
 }
 @media (max-width: 560px) { .about-bio { font-size: 16px; line-height: 1.6; } }
+
+/* phones: one column that fits the screen, calmer spacing, footer link centered */
+@media (max-width: 560px) {
+  .site-footer { justify-content: center; text-align: center; padding: 36px 0 44px; }
+  .section { padding: 48px 0; }
+  .collection-intro { padding: 72px 0 56px; gap: 20px; }
+  .cat { padding: 56px 0 0; }
+  .videos { gap: 48px; padding: 40px 0 88px; }
+  .photos { padding: 16px 0 88px; }
+  .music { padding: 56px 0 96px; }
+  .contact { gap: 40px; padding: 16px 0 96px; }
+  .contact-row { flex-direction: column; align-items: flex-start; padding: 24px 0; }
+  .about-page { gap: 28px; padding: 40px 0 96px; }
+  .fdn { gap: 64px; padding: 16px 0 88px; }
+  .cta { padding: 72px 0; }
+  .design-page { padding: 16px 0 88px; }
+  .work-list { padding: 56px 0 96px; }
+}
