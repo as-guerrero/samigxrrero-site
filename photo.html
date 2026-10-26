@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>photo · samigxrrero</title>
 <meta name="description" content="photo by sami gxrrero.">
-<link rel="stylesheet" href="styles.css?v=20261029a">
+<link rel="stylesheet" href="styles.css?v=20261029p">
 </head>
 <body>
 
@@ -27,7 +27,9 @@
   </header>
 
   <main class="photos" aria-label="Photo">
-    <a class="back" href="work.html">← back</a>
+    <a class="back" href="work.html" id="back">← back</a>
+    <h1 class="cat-title" id="cat-title" hidden></h1>
+    <nav class="cats" id="cats" aria-label="Photo categories"></nav>
     <div class="stream" id="stream"></div>
     <a class="stream-more" href="https://vsco.co/as-guerrero/gallery" target="_blank" rel="noopener">see everything on vsco</a>
   </main>
@@ -38,12 +40,35 @@
 
 </div>
 <script src="site.js?v=20261026v"></script>
-<script src="photos.js?v=20261025a"></script>
+<script src="photos.js?v=20261026a"></script>
 <script>
-/* photo stream: every vsco photo, one after another. loads 24 at a time as you scroll;
-   each one drifts in as it reaches the screen. clicking opens it on vsco. */
+/* photo page. without ?c= it lists the categories (name on the left, how many photos on the right).
+   with ?c=landscape it shows that category's photos, best first (the order they sit in photos.js).
+   loads 24 at a time as you scroll; clicking a photo opens it on vsco. */
 (function () {
-  var list = window.PHOTOS || [], stream = document.getElementById('stream'), next = 0, BATCH = 24;
+  var all = window.PHOTOS || [], ORDER = window.PHOTO_CATS || [];
+  var stream = document.getElementById('stream'), cats = document.getElementById('cats');
+  var want = new URLSearchParams(location.search).get('c');
+  var groups = {};
+  all.forEach(function (p) { var c = p.cat || 'archive'; (groups[c] = groups[c] || []).push(p); });
+  var names = ORDER.filter(function (c) { return groups[c]; });
+  if (groups.archive && names.indexOf('archive') < 0) names.push('archive');
+
+  if (!want || !groups[want]) {
+    cats.innerHTML = names.map(function (c) {
+      return '<a class="vid-meta cat-row" href="photo.html?c=' + encodeURIComponent(c) + '"><span>' + c +
+        '</span><span class="dim">' + groups[c].length + '</span></a>';
+    }).join('');
+    return;
+  }
+
+  cats.hidden = true;
+  var back = document.getElementById('back'), title = document.getElementById('cat-title');
+  back.href = 'photo.html'; back.textContent = '← all photos';
+  title.textContent = want; title.hidden = false;
+  document.title = want + ' · photo · samigxrrero';
+
+  var list = groups[want], next = 0, BATCH = 24;
   var reveal = 'IntersectionObserver' in window ? new IntersectionObserver(function (entries) {
     entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); reveal.unobserve(e.target); } });
   }, { rootMargin: '0px 0px -8% 0px' }) : null;
@@ -58,11 +83,11 @@
       if (reveal) reveal.observe(a); else a.classList.add('in');
     });
     next += BATCH;
-    if (next >= list.length) more.disconnect();
+    if (next >= list.length && more) more.disconnect();
   }
-  var more = new IntersectionObserver(function (e) { if (e[0].isIntersecting) add(); }, { rootMargin: '1200px 0px' });
+  var more = 'IntersectionObserver' in window ? new IntersectionObserver(function (e) { if (e[0].isIntersecting) add(); }, { rootMargin: '1200px 0px' }) : null;
   add();
-  more.observe(document.querySelector('.stream-more'));
+  if (more) more.observe(document.querySelector('.stream-more')); else while (next < list.length) add();
 })();
 </script>
 </body>
