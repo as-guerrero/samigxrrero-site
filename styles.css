@@ -13,7 +13,7 @@
 html { scroll-behavior: smooth; }
 
 /* nothing on the page may push it wider than the screen, so phones only scroll up and down */
-html { overflow-x: hidden; }
+html { overflow-x: hidden; overscroll-behavior-x: none; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
 body {
   margin: 0;
@@ -358,8 +358,16 @@ a.row:hover { background: #141414; padding-left: 16px; }
 }
 @media (max-width: 560px) { .about-bio { font-size: 16px; line-height: 1.6; } }
 
+/* touch screens: no hover lifts or wobbles (a tap leaves :hover stuck on phones) */
+@media (hover: none) {
+  .tile:hover, .tape:hover, .biglink:hover, .wave:hover,
+  .tile.deck:hover .deck-img img, .tile.zine:hover .zine-img img,
+  .more:hover .arrow, .world:hover .arrow, .row:hover .arrow { transform: none; text-shadow: none; }
+}
+
 /* phones: one column that fits the screen, calmer spacing, footer link centered */
 @media (max-width: 560px) {
+  .wrap { padding: 0 20px; }
   .site-footer { justify-content: center; text-align: center; padding: 36px 0 44px; }
   .section { padding: 48px 0; }
   .collection-intro { padding: 72px 0 56px; gap: 20px; }
