@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>music · samigxrrero</title>
+<meta name="description" content="music by Samí Guerrero.">
+<link rel="stylesheet" href="styles.css?v=20261025x">
+</head>
+<body>
+
+<svg class="grain" aria-hidden="true">
+  <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+  <rect width="100%" height="100%" filter="url(#grain)"/>
+</svg>
+
+<div class="wrap">
+
+  <header class="site-header">
+    <a class="logo" href="index.html">samigxrrero</a>
+    <nav class="nav" aria-label="Main">
+      <a href="work.html">work</a>
+      <a href="drops.html">shop</a>
+      <a href="about.html">about</a>
+      <a href="contact.html">contact</a>
+    </nav>
+  </header>
+
+  <main class="music" aria-label="Music">
+    <a class="back" href="work.html">← back</a>
+    <p class="label now">now playing:</p>
+    <button class="track" type="button" aria-haspopup="dialog">Samí Guerrero - <span id="title">Deus Sive Natura</span></button>
+    <button class="tape" type="button" aria-label="Play Deus Sive Natura" aria-pressed="false">
+      <span class="art"><img src="img/cassette.png" alt="" width="1228" height="789"><img class="reel l" src="img/hub-l.png" alt="" aria-hidden="true"><img class="reel r" src="img/hub-r.png" alt="" aria-hidden="true"><span class="grain" aria-hidden="true"></span></span>
+    </button>
+    <div class="deck">
+      <button class="skip" type="button" data-step="-1" aria-label="Previous song">←</button>
+      <span class="count" aria-live="polite"><span id="pos">1</span> / <span id="total">7</span></span>
+      <button class="skip" type="button" data-step="1" aria-label="Next song">→</button>
+    </div>
+    <p class="hint">tap the tape</p>
+  </main>
+
+  <dialog class="where" id="where" aria-labelledby="where-title">
+    <p class="label" id="where-title">listen on</p>
+    <div class="where-links">
+      <a id="go-apple" class="btn" href="#" target="_blank" rel="noopener">apple music</a>
+      <a id="go-spotify" class="btn" href="#" target="_blank" rel="noopener">spotify</a>
+    </div>
+    <form method="dialog"><button class="close" type="submit">close</button></form>
+  </dialog>
+
+  <footer id="contact" class="site-footer">
+    <a href="contact.html">commissions and collabs</a>
+    <div class="nav">
+      <a href="https://www.instagram.com/samigxrrero" target="_blank" rel="noopener">instagram</a>
+      <a href="https://www.youtube.com/@samigxrrero" target="_blank" rel="noopener">youtube</a>
+    </div>
+  </footer>
+
+</div>
+<script>
+(function () {
+  var tracks = [{"title": "Deus Sive Natura", "apple": "https://music.apple.com/us/album/deus-sive-natura/6800412531?i=6800412533", "spotify": "https://open.spotify.com/track/4HXy3je6lJchGeOc383nKH", "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/29/ec/99/29ec99df-e4ab-f80d-c8bd-853fc5c81eff/mzaf_16142720809235309807.plus.aac.p.m4a"}, {"title": "Somewhere", "apple": "https://music.apple.com/us/album/somewhere/6800410194?i=6800410405", "spotify": "https://open.spotify.com/track/5jDhTgVIWVGUUbDGsKz39r", "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ec/bf/fb/ecbffbd1-58f7-43b6-96ce-bec64899cad9/mzaf_14854160168208244527.plus.aac.p.m4a"}, {"title": "Recharge", "apple": "https://music.apple.com/us/album/recharge/6800412531?i=6800412534", "spotify": "https://open.spotify.com/track/2VSFihJBx4udHDUf4Q3N8V", "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/8b/ab/bc/8babbc30-f08a-ad97-80e0-30f1ca487391/mzaf_18434777570009737408.plus.aac.p.m4a"}, {"title": "Summit", "apple": "https://music.apple.com/us/album/summit/6800412531?i=6800412536", "spotify": "https://open.spotify.com/track/7Kz8a1QNeRRAQSJmfA39AC", "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/bd/84/d5/bd84d544-c817-29cb-8c82-0934837dccca/mzaf_4215276583341821697.plus.aac.p.m4a"}, {"title": "Canopy", "apple": "https://music.apple.com/us/album/canopy/6800412531?i=6800412535", "spotify": "https://open.spotify.com/track/7KtbKJlX4h0kPc40bRYPqx", "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ce/0c/c9/ce0cc93d-b30b-1a54-d583-49c869fd4d1a/mzaf_6922418572690519204.plus.aac.p.m4a"}, {"title": "A World Stood Still", "apple": "https://music.apple.com/us/album/a-world-stood-still/6800396852?i=6800396853", "spotify": "https://open.spotify.com/track/5hZmByi2AAzLaJDHWuD4TL", "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/77/54/11/775411e5-568c-01db-a3fe-be2cf1f9312d/mzaf_10397217579398778686.plus.aac.p.m4a"}, {"title": "El Apagón Eterno", "apple": "https://music.apple.com/us/album/el-apag%C3%B3n-eterno/6800396759?i=6800396760", "spotify": "https://open.spotify.com/track/0lw0rKah85RdEclNsf6nbx", "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/6f/95/e2/6f95e222-79c2-50fa-616c-ddd6257e6d2c/mzaf_13564776211063747993.plus.aac.p.m4a"}];
+  var i = 0, audio = new Audio();
+  audio.preload = 'none';
+  var tape = document.querySelector('.tape'), title = document.getElementById('title');
+  var pos = document.getElementById('pos'), dlg = document.getElementById('where');
+  document.getElementById('total').textContent = tracks.length;
+
+  // pull new releases from Apple Music automatically; newest new songs go first
+  var SPOTIFY_ARTIST = 'https://open.spotify.com/artist/5Z75hnB9WIqxigd2EnNWuS';
+  fetch('https://itunes.apple.com/lookup?id=6800396577&entity=song&limit=200&country=us')
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      var known = {};
+      tracks.forEach(function (t) { known[t.title.toLowerCase()] = t; });
+      var fresh = (data.results || [])
+        .filter(function (r) { return r.wrapperType === 'track' && r.previewUrl; })
+        .sort(function (a, b) { return new Date(b.releaseDate) - new Date(a.releaseDate); })
+        .filter(function (r) {
+          var t = known[r.trackName.toLowerCase()];
+          if (t) { t.preview = r.previewUrl; t.apple = r.trackViewUrl || t.apple; return false; }
+          return true;
+        })
+        .map(function (r) {
+          return { title: r.trackName, apple: r.trackViewUrl, spotify: SPOTIFY_ARTIST, preview: r.previewUrl };
+        });
+      if (!fresh.length) return;
+      var current = tracks[i];
+      tracks = fresh.concat(tracks);
+      if (audio.paused && !audio.src) i = 0; else i = tracks.indexOf(current);
+      document.getElementById('total').textContent = tracks.length;
+      show();
+    })
+    .catch(function () {});
+
+  function show() {
+    var t = tracks[i];
+    title.textContent = t.title;
+    pos.textContent = i + 1;
+    tape.setAttribute('aria-label', (audio.paused ? 'Play ' : 'Pause ') + t.title);
+  }
+  function setPlaying(on) {
+    tape.classList.toggle('playing', on);
+    tape.setAttribute('aria-pressed', on);
+    show();
+  }
+  function load(n, autoplay) {
+    i = (n + tracks.length) % tracks.length;
+    audio.src = tracks[i].preview;
+    show();
+    if (autoplay) audio.play();
+  }
+
+  tape.addEventListener('click', function () {
+    if (!audio.src) load(i, false);
+    if (audio.paused) audio.play(); else audio.pause();
+  });
+  audio.addEventListener('play', function () { setPlaying(true); });
+  audio.addEventListener('pause', function () { setPlaying(false); });
+  audio.addEventListener('ended', function () { load(i + 1, true); });
+
+  document.querySelectorAll('.skip').forEach(function (b) {
+    b.addEventListener('click', function () { load(i + +b.dataset.step, !audio.paused); });
+  });
+
+  document.querySelector('.track').addEventListener('click', function () {
+    document.getElementById('go-apple').href = tracks[i].apple;
+    document.getElementById('go-spotify').href = tracks[i].spotify;
+    dlg.showModal();
+  });
+  dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+  dlg.querySelectorAll('.where-links a').forEach(function (a) {
+    a.addEventListener('click', function () { dlg.close(); });
+  });
+  show();
+})();
+</script>
+<script src="site.js?v=20261025t"></script>
+</body>
+</html>

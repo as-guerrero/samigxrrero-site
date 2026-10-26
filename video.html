@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>video · samigxrrero</title>
+<meta name="description" content="video by sami gxrrero.">
+<link rel="stylesheet" href="styles.css?v=20261025x">
+</head>
+<body>
+
+<svg class="grain" aria-hidden="true">
+  <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+  <rect width="100%" height="100%" filter="url(#grain)"/>
+</svg>
+
+<div class="wrap">
+
+  <header class="site-header">
+    <a class="logo" href="index.html">samigxrrero</a>
+    <nav class="nav" aria-label="Main">
+      <a href="work.html">work</a>
+      <a href="drops.html">shop</a>
+      <a href="about.html">about</a>
+      <a href="contact.html">contact</a>
+    </nav>
+  </header>
+
+  <main class="videos" aria-label="Video">
+    <a class="back" href="work.html">← back</a>
+    <article class="vid" data-id="RLknS7BhdaI" data-start="518" data-end="533">
+      <div class="frame">
+        <img src="https://i.ytimg.com/vi/RLknS7BhdaI/maxresdefault.jpg" alt="" loading="lazy" onload="if(this.naturalWidth&lt;=120&amp;&amp;!this.dataset.f){this.dataset.f=1;this.src='https://i.ytimg.com/vi/RLknS7BhdaI/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/RLknS7BhdaI/hqdefault.jpg'">
+        <button class="play" type="button" aria-label="Play Luz Prestada"></button>
+      </div>
+      <div class="vid-meta"><span>Luz Prestada</span><span class="dim">short film</span></div>
+    </article>
+    <article class="vid" data-id="Xgx4ahPUVww" data-start="157" data-end="170">
+      <div class="frame">
+        <img src="https://i.ytimg.com/vi/Xgx4ahPUVww/maxresdefault.jpg" alt="" loading="lazy" onload="if(this.naturalWidth&lt;=120&amp;&amp;!this.dataset.f){this.dataset.f=1;this.src='https://i.ytimg.com/vi/Xgx4ahPUVww/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/Xgx4ahPUVww/hqdefault.jpg'">
+        <button class="play" type="button" aria-label="Play Deus Sive Natura"></button>
+      </div>
+      <div class="vid-meta"><span>Deus Sive Natura</span><span class="dim">music video</span></div>
+    </article>
+    <article class="vid" data-id="TbPE63GfzI8" data-start="77" data-end="84">
+      <div class="frame">
+        <img src="https://i.ytimg.com/vi/TbPE63GfzI8/maxresdefault.jpg" alt="" loading="lazy" onload="if(this.naturalWidth&lt;=120&amp;&amp;!this.dataset.f){this.dataset.f=1;this.src='https://i.ytimg.com/vi/TbPE63GfzI8/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/TbPE63GfzI8/hqdefault.jpg'">
+        <button class="play" type="button" aria-label="Play Somewhere"></button>
+      </div>
+      <div class="vid-meta"><span>Somewhere</span><span class="dim">music video</span></div>
+    </article>
+  </main>
+
+  <footer id="contact" class="site-footer">
+    <a href="contact.html">commissions and collabs</a>
+    <div class="nav">
+      <a href="https://www.instagram.com/samigxrrero" target="_blank" rel="noopener">instagram</a>
+      <a href="https://www.youtube.com/@samigxrrero" target="_blank" rel="noopener">youtube</a>
+    </div>
+  </footer>
+
+</div>
+<script>
+(function () {
+  var cards = document.querySelectorAll('.vid[data-id]');
+  if (!cards.length) return;
+  var ready = new Promise(function (r) { window.onYouTubeIframeAPIReady = r; });
+  var tag = document.createElement('script');
+  tag.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(tag);
+  var canHover = window.matchMedia('(hover: hover)').matches;
+  var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  cards.forEach(function (card) {
+    var id = card.dataset.id, frame = card.querySelector('.frame');
+    var preview = null, timer = null, full = false, want = false;
+
+    function start() {
+      want = true;
+      if (full || preview || calm) return;
+      ready.then(function () {
+        if (full || !want || preview) return;
+        var host = document.createElement('div');
+        host.className = 'loop';
+        frame.appendChild(host);
+        preview = new YT.Player(host, {
+          videoId: id,
+          playerVars: { autoplay: 1, mute: 1, controls: 0, disablekb: 1, playsinline: 1, rel: 0, iv_load_policy: 3, fs: 0 },
+          events: {
+            onReady: function (e) {
+              var p = e.target, s = +card.dataset.start || 0, end = +card.dataset.end || s + 6;
+              p.mute(); p.seekTo(s, true); p.playVideo();
+              timer = setInterval(function () {
+                var t = p.getCurrentTime();
+                if (t >= end || t < s - 1) p.seekTo(s, true);
+              }, 150);
+            },
+            onStateChange: function (e) { if (e.data === 1) card.classList.add('looping'); }
+          }
+        });
+      });
+    }
+    function stop() {
+      want = false;
+      if (full) return;
+      clearInterval(timer);
+      card.classList.remove('looping');
+      if (preview) { preview.destroy(); preview = null; }
+      var l = frame.querySelector('.loop'); if (l) l.remove();
+    }
+    function play() {
+      full = true;
+      clearInterval(timer);
+      if (preview) { preview.destroy(); preview = null; }
+      frame.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id +
+        '?autoplay=1&rel=0&playsinline=1" title="' + card.querySelector('.vid-meta span').textContent +
+        '" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
+      card.classList.add('playing');
+    }
+
+    if (canHover) {
+      card.addEventListener('mouseenter', start);
+      card.addEventListener('mouseleave', stop);
+    }
+    card.querySelector('.play').addEventListener('click', play);
+  });
+})();
+</script>
+<script src="site.js?v=20261025t"></script>
+</body>
+</html>

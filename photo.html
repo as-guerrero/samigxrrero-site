@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>photo · samigxrrero</title>
+<meta name="description" content="photo by sami gxrrero.">
+<link rel="stylesheet" href="styles.css?v=20261025x">
+</head>
+<body>
+
+<svg class="grain" aria-hidden="true">
+  <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+  <rect width="100%" height="100%" filter="url(#grain)"/>
+</svg>
+
+<div class="wrap">
+
+  <header class="site-header">
+    <a class="logo" href="index.html">samigxrrero</a>
+    <nav class="nav" aria-label="Main">
+      <a href="work.html">work</a>
+      <a href="drops.html">shop</a>
+      <a href="about.html">about</a>
+      <a href="contact.html">contact</a>
+    </nav>
+  </header>
+
+  <main class="photos" aria-label="Photo">
+    <a class="back" href="work.html">← back</a>
+    <div class="stream" id="stream"></div>
+    <a class="stream-more" href="https://vsco.co/as-guerrero/gallery" target="_blank" rel="noopener">see everything on vsco</a>
+  </main>
+
+  <footer id="contact" class="site-footer">
+    <a href="contact.html">commissions and collabs</a>
+    <div class="nav">
+      <a href="https://www.instagram.com/samigxrrero" target="_blank" rel="noopener">instagram</a>
+      <a href="https://www.youtube.com/@samigxrrero" target="_blank" rel="noopener">youtube</a>
+    </div>
+  </footer>
+
+</div>
+<script src="site.js?v=20261025t"></script>
+<script src="photos.js?v=20261025a"></script>
+<script>
+/* photo stream: every vsco photo, one after another. loads 24 at a time as you scroll;
+   each one drifts in as it reaches the screen. clicking opens it on vsco. */
+(function () {
+  var list = window.PHOTOS || [], stream = document.getElementById('stream'), next = 0, BATCH = 24;
+  var reveal = 'IntersectionObserver' in window ? new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); reveal.unobserve(e.target); } });
+  }, { rootMargin: '0px 0px -8% 0px' }) : null;
+  function add() {
+    list.slice(next, next + BATCH).forEach(function (p) {
+      var base = p.src + '?w=';
+      var a = document.createElement('a');
+      a.className = 'still'; a.href = p.link; a.target = '_blank'; a.rel = 'noopener';
+      a.setAttribute('aria-label', 'open this photo on vsco');
+      a.innerHTML = '<img src="' + base + '900" srcset="' + base + '600 600w, ' + base + '900 900w, ' + base + '1400 1400w" sizes="(max-width: 760px) 100vw, 720px" width="' + p.w + '" height="' + p.h + '" alt="" loading="lazy" decoding="async">';
+      stream.appendChild(a);
+      if (reveal) reveal.observe(a); else a.classList.add('in');
+    });
+    next += BATCH;
+    if (next >= list.length) more.disconnect();
+  }
+  var more = new IntersectionObserver(function (e) { if (e[0].isIntersecting) add(); }, { rootMargin: '1200px 0px' });
+  add();
+  more.observe(document.querySelector('.stream-more'));
+})();
+</script>
+</body>
+</html>
