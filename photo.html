@@ -54,6 +54,10 @@
   var names = ORDER.filter(function (c) { return groups[c]; });
   if (groups.archive && names.indexOf('archive') < 0) names.push('archive');
 
+  // only one group so far (nothing sorted yet): skip the list and show the photos
+  if (!want && names.length === 1) want = names[0];
+  var single = names.length === 1;
+
   if (!want || !groups[want]) {
     cats.innerHTML = names.map(function (c) {
       return '<a class="vid-meta cat-row" href="photo.html?c=' + encodeURIComponent(c) + '"><span>' + c +
@@ -64,9 +68,11 @@
 
   cats.hidden = true;
   var back = document.getElementById('back'), title = document.getElementById('cat-title');
-  back.href = 'photo.html'; back.textContent = '← all photos';
-  title.textContent = want; title.hidden = false;
-  document.title = want + ' · photo · samigxrrero';
+  if (!single) {
+    back.href = 'photo.html'; back.textContent = '← all photos';
+    title.textContent = want; title.hidden = false;
+    document.title = want + ' · photo · samigxrrero';
+  }
 
   var list = groups[want], next = 0, BATCH = 24;
   var reveal = 'IntersectionObserver' in window ? new IntersectionObserver(function (entries) {
@@ -79,6 +85,8 @@
       a.className = 'still'; a.href = p.link; a.target = '_blank'; a.rel = 'noopener';
       a.setAttribute('aria-label', 'open this photo on vsco');
       a.innerHTML = '<img src="' + base + '900" srcset="' + base + '600 600w, ' + base + '900 900w, ' + base + '1400 1400w" sizes="(max-width: 760px) 100vw, 720px" width="' + p.w + '" height="' + p.h + '" alt="" loading="lazy" decoding="async">';
+      // a photo deleted from vsco no longer loads: drop it instead of leaving a gap
+      a.firstChild.onerror = function () { a.remove(); };
       stream.appendChild(a);
       if (reveal) reveal.observe(a); else a.classList.add('in');
     });
