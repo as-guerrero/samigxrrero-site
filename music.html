@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>music · samigxrrero</title>
 <meta name="description" content="music by Samí Guerrero.">
-<link rel="stylesheet" href="styles.css?v=20261029p">
+<link rel="stylesheet" href="styles.css?v=20261030w">
 </head>
 <body>
 
@@ -30,15 +30,15 @@
     <a class="back" href="work.html">← back</a>
     <p class="label now">now playing:</p>
     <button class="track" type="button" aria-haspopup="dialog">Samí Guerrero - <span id="title">Deus Sive Natura</span></button>
-    <button class="tape" type="button" aria-label="Play Deus Sive Natura" aria-pressed="false">
-      <span class="art"><img src="img/cassette.png" alt="" width="1228" height="789"><img class="reel l" src="img/hub-l.png" alt="" aria-hidden="true"><img class="reel r" src="img/hub-r.png" alt="" aria-hidden="true"><span class="grain" aria-hidden="true"></span></span>
+    <button class="scope" type="button" aria-label="Play Deus Sive Natura" aria-pressed="false">
+      <canvas id="wave" aria-hidden="true"></canvas>
     </button>
     <div class="deck">
       <button class="skip" type="button" data-step="-1" aria-label="Previous song">←</button>
       <span class="count" aria-live="polite"><span id="pos">1</span> / <span id="total">7</span></span>
       <button class="skip" type="button" data-step="1" aria-label="Next song">→</button>
     </div>
-    <p class="hint">tap the tape</p>
+    <p class="hint">tap the wave</p>
   </main>
 
   <dialog class="where" id="where" aria-labelledby="where-title">
@@ -60,7 +60,8 @@
   var tracks = [{"title": "Deus Sive Natura", "apple": "https://music.apple.com/us/album/deus-sive-natura/6800412531?i=6800412533", "spotify": "https://open.spotify.com/track/4HXy3je6lJchGeOc383nKH", "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/29/ec/99/29ec99df-e4ab-f80d-c8bd-853fc5c81eff/mzaf_16142720809235309807.plus.aac.p.m4a"}, {"title": "Somewhere", "apple": "https://music.apple.com/us/album/somewhere/6800410194?i=6800410405", "spotify": "https://open.spotify.com/track/5jDhTgVIWVGUUbDGsKz39r", "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/ec/bf/fb/ecbffbd1-58f7-43b6-96ce-bec64899cad9/mzaf_14854160168208244527.plus.aac.p.m4a"}, {"title": "Recharge", "apple": "https://music.apple.com/us/album/recharge/6800412531?i=6800412534", "spotify": "https://open.spotify.com/track/2VSFihJBx4udHDUf4Q3N8V", "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/8b/ab/bc/8babbc30-f08a-ad97-80e0-30f1ca487391/mzaf_18434777570009737408.plus.aac.p.m4a"}, {"title": "Summit", "apple": "https://music.apple.com/us/album/summit/6800412531?i=6800412536", "spotify": "https://open.spotify.com/track/7Kz8a1QNeRRAQSJmfA39AC", "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/bd/84/d5/bd84d544-c817-29cb-8c82-0934837dccca/mzaf_4215276583341821697.plus.aac.p.m4a"}, {"title": "Canopy", "apple": "https://music.apple.com/us/album/canopy/6800412531?i=6800412535", "spotify": "https://open.spotify.com/track/7KtbKJlX4h0kPc40bRYPqx", "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ce/0c/c9/ce0cc93d-b30b-1a54-d583-49c869fd4d1a/mzaf_6922418572690519204.plus.aac.p.m4a"}, {"title": "A World Stood Still", "apple": "https://music.apple.com/us/album/a-world-stood-still/6800396852?i=6800396853", "spotify": "https://open.spotify.com/track/5hZmByi2AAzLaJDHWuD4TL", "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/77/54/11/775411e5-568c-01db-a3fe-be2cf1f9312d/mzaf_10397217579398778686.plus.aac.p.m4a"}, {"title": "El Apagón Eterno", "apple": "https://music.apple.com/us/album/el-apag%C3%B3n-eterno/6800396759?i=6800396760", "spotify": "https://open.spotify.com/track/0lw0rKah85RdEclNsf6nbx", "preview": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/6f/95/e2/6f95e222-79c2-50fa-616c-ddd6257e6d2c/mzaf_13564776211063747993.plus.aac.p.m4a"}];
   var i = 0, audio = new Audio();
   audio.preload = 'none';
-  var tape = document.querySelector('.tape'), title = document.getElementById('title');
+  audio.crossOrigin = 'anonymous';
+  var tape = document.querySelector('.scope'), title = document.getElementById('title');
   var pos = document.getElementById('pos'), dlg = document.getElementById('where');
   document.getElementById('total').textContent = tracks.length;
 
@@ -115,12 +116,21 @@
   }
 
   tape.addEventListener('click', function () {
+    wave.wake();
     if (!audio.src) load(i, false);
     if (audio.paused) audio.play(); else audio.pause();
   });
   audio.addEventListener('play', function () { setPlaying(true); });
   audio.addEventListener('pause', function () { setPlaying(false); });
   audio.addEventListener('ended', function () { load(i + 1, true); });
+  // if a song won't load with permission to read its sound, play it plainly (the wave then just breathes)
+  audio.addEventListener('error', function () {
+    if (!audio.crossOrigin || !audio.src) return;
+    audio.removeAttribute('crossorigin');
+    wave.plain();
+    var t = audio.src; audio.src = t; audio.play().catch(function () {});
+  });
+  var wave = scope(document.getElementById('wave'), audio, tape);
 
   document.querySelectorAll('.skip').forEach(function (b) {
     b.addEventListener('click', function () { load(i + +b.dataset.step, !audio.paused); });
@@ -136,6 +146,78 @@
     a.addEventListener('click', function () { dlg.close(); });
   });
   show();
+
+  // the line: a calm sine wave at rest, bent into the song's own waveform while it plays
+  function scope(cv, el, box) {
+    var ctx = cv.getContext('2d'), ac = null, an = null, buf = null, ok = true, wired = false;
+    var N = 160, ys = new Float32Array(N), live = 0, t = 0, w = 0, h = 0;
+    var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function size() {
+      var r = window.devicePixelRatio || 1;
+      w = cv.clientWidth; h = cv.clientHeight;
+      cv.width = Math.round(w * r); cv.height = Math.round(h * r);
+      ctx.setTransform(r, 0, 0, r, 0, 0);
+    }
+    // the audio context starts on the tap (phones require that); the song is wired in once it actually plays
+    function wake() {
+      if (!ok) return;
+      try {
+        if (!ac) {
+          var AC = window.AudioContext || window.webkitAudioContext;
+          ac = new AC();
+          an = ac.createAnalyser(); an.fftSize = 2048; an.smoothingTimeConstant = .6;
+          an.connect(ac.destination);
+          buf = new Float32Array(an.fftSize);
+        }
+        if (ac.state === 'suspended') ac.resume();
+      } catch (e) { ok = false; }
+    }
+    function wire() {
+      if (wired || !ok || !ac || !el.crossOrigin) return;
+      try { ac.createMediaElementSource(el).connect(an); wired = true; } catch (e) { ok = false; }
+    }
+    el.addEventListener('playing', wire);
+    function frame() {
+      var playing = !el.paused;
+      live += ((playing ? 1 : 0) - live) * .06;
+      t += still ? 0 : .012 + live * .02;
+      var reading = playing && wired;
+      if (reading) an.getFloatTimeDomainData(buf);
+      var mid = h / 2, amp = h * .36;
+      for (var k = 0; k < N; k++) {
+        var x = k / (N - 1);
+        var rest = Math.sin(x * Math.PI * 4 - t * 2) * .22;
+        var song = 0;
+        if (reading) {
+          // average each point's slice of samples so the line stays smooth
+          var step = Math.floor(buf.length / N), a = k * step, sum = 0;
+          for (var j = 0; j < step; j++) sum += buf[a + j];
+          song = sum / step * 2.4;
+        } else if (playing) {
+          song = Math.sin(x * Math.PI * 9 + t * 5) * .18 * Math.sin(t * 1.3);
+        }
+        var target = rest * (1 - live * .6) + song * live;
+        ys[k] += (Math.max(-1, Math.min(1, target)) - ys[k]) * .35;
+      }
+      ctx.clearRect(0, 0, w, h);
+      ctx.strokeStyle = 'rgba(232, 232, 230, .08)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(0, Math.round(mid) + .5); ctx.lineTo(w, Math.round(mid) + .5); ctx.stroke();
+      ctx.strokeStyle = 'rgba(232, 232, 230, ' + (.7 + live * .3) + ')'; ctx.lineWidth = 1.5;
+      ctx.lineJoin = 'round';
+      ctx.beginPath();
+      for (k = 0; k < N; k++) {
+        var edge = Math.sin(Math.PI * k / (N - 1)); // ends rest on the center line
+        var px = k / (N - 1) * w, py = mid - ys[k] * amp * Math.pow(edge, .6);
+        if (k) ctx.lineTo(px, py); else ctx.moveTo(px, py);
+      }
+      ctx.stroke();
+      requestAnimationFrame(frame);
+    }
+    size();
+    window.addEventListener('resize', size);
+    requestAnimationFrame(frame);
+    return { wake: wake, plain: function () { if (!wired) ok = false; } };
+  }
 })();
 </script>
 <script src="site.js?v=20261026v"></script>
