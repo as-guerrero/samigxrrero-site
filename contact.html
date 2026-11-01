@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&display=swap">
-<link rel="stylesheet" href="styles.css?v=20261101j">
+<link rel="stylesheet" href="styles.css?v=20261101k">
 </head>
 <body>
 
@@ -35,23 +35,21 @@
     </section>
 
     <section class="c-inquiry" aria-label="Inquiry">
-      <p class="label">project inquiry form</p>
+      <p class="label inq-title">Project Inquiry Form</p>
       <form class="inquiry" data-to="samigxrrero@outlook.com">
         <div class="inq-row">
-          <label><span>first name</span><input name="first" type="text" autocomplete="given-name" required></label>
-          <label><span>last name</span><input name="last" type="text" autocomplete="family-name" required></label>
+          <label><span>First Name</span><input name="first" type="text" autocomplete="given-name" required></label>
+          <label><span>Last Name</span><input name="last" type="text" autocomplete="family-name" required></label>
         </div>
-        <label><span>business name</span><input name="business" type="text" autocomplete="organization"></label>
-        <label><span>instagram handle</span><input name="ig" type="text" placeholder="@"></label>
-        <label><span>email address</span><input name="email" type="email" autocomplete="email" required></label>
-        <label><span>subject</span><input name="subject" type="text" placeholder="what is this about?" required></label>
-        <label><span>what is your ideal project start date?</span><input name="start" type="text" placeholder="month / year"></label>
-        <label><span>tell me about your project, the more detail the better.</span><textarea name="details" rows="7" required></textarea></label>
-        <label><span>what is your project budget?</span><input name="budget" type="text"></label>
-        <label><span>how did you hear about Samí Guerrero?</span><input name="heard" type="text"></label>
-        <label><span>why do you want to work with me specifically?</span><textarea name="why" rows="4"></textarea></label>
+        <label><span>Business Name</span><input name="business" type="text" autocomplete="organization"></label>
+        <label><span>Instagram Handle</span><input name="ig" type="text" placeholder="@"></label>
+        <label><span>Email Address</span><input name="email" type="email" autocomplete="email" required></label>
+        <label><span>Subject</span><input name="subject" type="text" required></label>
+        <label><span>What is your ideal project start date?</span><input name="start" type="text"></label>
+        <label><span>Tell me about your project, the more detail the better.</span><textarea name="details" rows="6" required></textarea></label>
+        <label><span>What is your project budget?</span><input name="budget" type="text"></label>
         <input type="text" name="_honey" class="sr-only" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <div class="inq-send"><button class="btn" type="submit">send inquiry</button></div>
+        <div class="inq-send"><button class="btn" type="submit">Send Inquiry</button></div>
         <p class="inq-status" role="status" aria-live="polite"></p>
       </form>
     </section>
@@ -74,18 +72,17 @@
       'first name': v('first'), 'last name': v('last'), 'business name': v('business'),
       instagram: v('ig'), email: v('email'), subject: v('subject'), 'ideal start date': v('start'),
       project: v('details'), 'project budget': v('budget'),
-      'how they heard about you': v('heard'), 'why work with you': v('why'),
       _subject: v('subject') + ' (inquiry from ' + name + ')', _replyto: v('email'), _template: 'table', _captcha: 'false'
     };
-    btn.disabled = true; btn.textContent = 'sending…'; status.textContent = '';
+    btn.disabled = true; btn.textContent = 'Sending…'; status.textContent = '';
     fetch('https://formsubmit.co/ajax/' + f.dataset.to, {
       method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data)
     }).then(function (r) { return r.json(); }).then(function (j) {
       if (String(j.success) !== 'true') throw new Error(j.message || 'not sent');
-      f.reset(); btn.textContent = 'sent'; status.textContent = 'thank you, i’ll be in touch.';
-      setTimeout(function () { btn.disabled = false; btn.textContent = 'send inquiry'; }, 4000);
+      f.reset(); btn.textContent = 'Sent'; status.textContent = 'Thank you, I’ll be in touch.';
+      setTimeout(function () { btn.disabled = false; btn.textContent = 'Send Inquiry'; }, 4000);
     }).catch(function () {
-      btn.disabled = false; btn.textContent = 'send inquiry';
+      btn.disabled = false; btn.textContent = 'Send Inquiry';
       var body = Object.keys(data).filter(function (k) { return k.charAt(0) !== '_'; })
         .map(function (k) { return k + ': ' + data[k]; }).join('\n');
       location.href = 'mailto:' + f.dataset.to + '?subject=' + encodeURIComponent(data._subject) + '&body=' + encodeURIComponent(body);
