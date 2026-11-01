@@ -510,3 +510,13 @@ body::after { inset: -160px; will-change: transform; animation: static .8s steps
   87.5% { transform: translate(-131px, -47px); }
 }
 @media (prefers-reduced-motion: reduce) { body::after { animation: none; } }
+
+/* connect: sami's tree photo as a quiet still. Inverted and softened in the file itself;
+   edges fade into the page so it sits in the grain rather than on top of it */
+.c-follow-card img.c-still { aspect-ratio: 1 / 1; filter: none; opacity: .85;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent), linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent);
+  -webkit-mask-composite: source-in;
+          mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent), linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent);
+          mask-composite: intersect; }
+.c-follow-card:hover img.c-still { filter: none; }
+.c-follow-card { width: min(100%, 440px); }
