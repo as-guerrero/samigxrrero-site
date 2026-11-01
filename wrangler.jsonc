@@ -1,10 +1,17 @@
 // Cloudflare deploy settings: serve this folder as a static site on the "lakemane" Worker.
+// worker/index.js only handles /api/inquiry (the connect page form); everything else is the static files.
 {
   "name": "lakemane",
   "compatibility_date": "2026-10-25",
+  "main": "worker/index.js",
   "assets": {
-    "directory": "./"
+    "directory": "./",
+    "binding": "ASSETS"
   },
+  // lets the form email sami through Cloudflare Email Routing (the address must be a verified destination there)
+  "send_email": [
+    { "name": "INQUIRY", "destination_address": "samigxrrero@outlook.com" }
+  ],
   // needed for Cloudflare's preview builds on pull requests
   "previews": {}
 }
