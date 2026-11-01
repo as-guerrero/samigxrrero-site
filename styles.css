@@ -484,3 +484,5 @@ a.good:hover .zine-img img { transform: scale(1.03); }
 .inquiry .btn { align-self: center; }
 .inq-status { margin: 0; min-height: 1.2em; text-align: center; font-size: 17px; color: var(--muted); }
 .inquiry { position: relative; }
+.inq-send { display: flex; justify-content: center; width: 100%; margin-top: 8px; }
+.inq-send .btn { align-self: auto; margin: 0; }
