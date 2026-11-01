@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&display=swap">
-<link rel="stylesheet" href="styles.css?v=20261101h">
+<link rel="stylesheet" href="styles.css?v=20261101i">
 </head>
 <body>
 
@@ -23,16 +23,14 @@
 
   <main class="contact2" aria-label="Contact">
     <section class="c-direct">
-      <h1 class="big">connect</h1>
-      <p class="contact-line">for direction and collaborations, write me.</p>
+      <h1 class="sr-only">connect</h1>
       <a class="c-email" href="mailto:samigxrrero@outlook.com">samigxrrero@outlook.com</a>
     </section>
 
-    <section class="c-follow" aria-label="Follow along">
-      <p class="label">follow along</p>
+    <section class="c-follow" aria-label="Instagram">
       <a class="c-follow-card" href="https://www.instagram.com/samigxrrero" target="_blank" rel="noopener">
         <img src="img/about-2.webp" alt="Samí Guerrero" width="2000" height="1333" loading="lazy">
-        <span>@samigxrrero on instagram</span>
+        <span class="c-handle">@samigxrrero</span>
       </a>
     </section>
 
@@ -40,17 +38,18 @@
       <p class="label">project inquiry</p>
       <form class="inquiry" data-to="samigxrrero@outlook.com">
         <div class="inq-row">
-          <label><span>name</span><input name="name" type="text" autocomplete="name" required></label>
+          <label><span>name</span><input name="name" type="text" autocomplete="name" placeholder="first and last name" required></label>
           <label><span>email</span><input name="email" type="email" autocomplete="email" required></label>
         </div>
         <div class="inq-row">
           <label><span>instagram handle</span><input name="ig" type="text" placeholder="@"></label>
           <label><span>ideal start date</span><input name="start" type="text" placeholder="month / year"></label>
         </div>
-        <label><span>budget</span><input name="budget" type="text"></label>
+        <label><span>what is your project budget</span><input name="budget" type="text"></label>
         <label><span>tell me about your project, the more detail the better</span><textarea name="details" rows="6" required></textarea></label>
+        <input type="text" name="_honey" class="sr-only" tabindex="-1" autocomplete="off" aria-hidden="true">
         <button class="btn" type="submit">send inquiry</button>
-        <p class="inq-note">this opens your email app with everything filled in.</p>
+        <p class="inq-status" role="status" aria-live="polite"></p>
       </form>
     </section>
   </main>
@@ -59,21 +58,32 @@
 </div>
 <script>
 (function () {
-  // the form opens your email app with the answers filled in (no account or server needed)
-  var f = document.querySelector('.inquiry');
+  // inquiries go straight to sami's inbox through FormSubmit (free, no account; the first one
+  // ever sent asks sami to confirm by email). If that service can't be reached, fall back to
+  // opening the visitor's email app with everything filled in.
+  var f = document.querySelector('.inquiry'), status = f.querySelector('.inq-status'), btn = f.querySelector('button');
+  var v = function (n) { return f[n].value.trim(); };
   f.addEventListener('submit', function (e) {
     e.preventDefault();
-    var v = function (n) { return f[n].value.trim(); };
-    var body = [
-      'name: ' + v('name'),
-      'email: ' + v('email'),
-      'instagram: ' + v('ig'),
-      'ideal start date: ' + v('start'),
-      'budget: ' + v('budget'),
-      '',
-      v('details')
-    ].join('\n');
-    location.href = 'mailto:' + f.dataset.to + '?subject=' + encodeURIComponent('project inquiry from ' + v('name')) + '&body=' + encodeURIComponent(body);
+    if (v('_honey')) return;
+    var data = {
+      name: v('name'), email: v('email'), instagram: v('ig'),
+      'ideal start date': v('start'), 'project budget': v('budget'), project: v('details'),
+      _subject: 'project inquiry from ' + v('name'), _replyto: v('email'), _template: 'table', _captcha: 'false'
+    };
+    btn.disabled = true; btn.textContent = 'sending…'; status.textContent = '';
+    fetch('https://formsubmit.co/ajax/' + f.dataset.to, {
+      method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data)
+    }).then(function (r) { return r.json(); }).then(function (j) {
+      if (String(j.success) !== 'true') throw new Error(j.message || 'not sent');
+      f.reset(); btn.textContent = 'sent'; status.textContent = 'thank you, i’ll be in touch.';
+      setTimeout(function () { btn.disabled = false; btn.textContent = 'send inquiry'; }, 4000);
+    }).catch(function () {
+      btn.disabled = false; btn.textContent = 'send inquiry';
+      var body = ['name: ' + data.name, 'email: ' + data.email, 'instagram: ' + data.instagram,
+        'ideal start date: ' + data['ideal start date'], 'project budget: ' + data['project budget'], '', data.project].join('\n');
+      location.href = 'mailto:' + f.dataset.to + '?subject=' + encodeURIComponent(data._subject) + '&body=' + encodeURIComponent(body);
+    });
   });
 })();
 </script>
