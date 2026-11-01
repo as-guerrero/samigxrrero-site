@@ -82,6 +82,8 @@
     } else {
       start();
     }
-    card.querySelector('.play').addEventListener('click', play);
+    // on the homepage the video is a link straight to YouTube; elsewhere it plays in place
+    var btn = card.querySelector('.play');
+    if (btn && btn.tagName === 'BUTTON') btn.addEventListener('click', play);
   });
 })();
