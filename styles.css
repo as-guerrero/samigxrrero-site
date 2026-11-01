@@ -495,3 +495,18 @@ a.good:hover .zine-img img { transform: scale(1.03); }
 .at-wrap { position: relative; display: block; }
 .at-wrap .at { position: absolute; left: 0; top: 50%; transform: translateY(-50%); font-size: 20px; color: var(--muted); pointer-events: none; }
 .at-wrap input { padding-left: 19px; }
+
+/* moving static: the same grain tile jumps to a new spot ~10 times a second, like old tv static.
+   transform only, so it stays on the graphics card and doesn't slow scrolling */
+body::after { inset: -160px; will-change: transform; animation: static .8s steps(1, end) infinite; }
+@keyframes static {
+  0%   { transform: translate(0, 0); }
+  12.5% { transform: translate(-53px, 37px); }
+  25%  { transform: translate(71px, -29px); }
+  37.5% { transform: translate(-17px, -83px); }
+  50%  { transform: translate(97px, 61px); }
+  62.5% { transform: translate(-89px, 11px); }
+  75%  { transform: translate(23px, 113px); }
+  87.5% { transform: translate(-131px, -47px); }
+}
+@media (prefers-reduced-motion: reduce) { body::after { animation: none; } }
