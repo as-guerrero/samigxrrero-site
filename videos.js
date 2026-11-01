@@ -66,9 +66,14 @@
     // loop the chosen clip on its own whenever the video is on screen, like the homepage;
     // stop it once it scrolls away so the page stays light on phones
     if ('IntersectionObserver' in window) {
+      var seen = false, covered = false;
+      var sync = function () { if (seen && !covered) start(); else stop(); };
       new IntersectionObserver(function (entries) {
-        entries.forEach(function (en) { if (en.isIntersecting) start(); else stop(); });
+        entries.forEach(function (en) { seen = en.isIntersecting; sync(); });
       }, { rootMargin: '200px 0px', threshold: 0 }).observe(card);
+      // on the homepage a world that the next one has slid over is still "on screen", so pause it
+      var layer = card.closest('[data-stack]');
+      if (layer) layer.addEventListener('covered', function (e) { covered = e.detail; sync(); });
     } else {
       start();
     }
