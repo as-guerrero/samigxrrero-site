@@ -520,3 +520,8 @@ body::after { inset: -160px; will-change: transform; animation: static .8s steps
           mask-composite: intersect; }
 .c-follow-card:hover img.c-still { filter: none; }
 .c-follow-card { width: min(100%, 440px); }
+
+/* about: several paragraphs of bio */
+.about-bio p { margin: 0 0 1.1em; }
+.about-bio p:last-child { margin-bottom: 0; }
+.about-bio em { font-style: italic; font-synthesis: style; color: var(--fg); }
