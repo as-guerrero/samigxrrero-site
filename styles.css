@@ -525,3 +525,6 @@ body::after { inset: -160px; will-change: transform; animation: static .8s steps
 .about-bio p { margin: 0 0 1.1em; }
 .about-bio p:last-child { margin-bottom: 0; }
 .about-bio em { font-style: italic; font-synthesis: style; color: var(--fg); }
+/* about: each sentence starts on its own line, with a hair of space so wrapped ones stay readable */
+.about-bio p span { display: block; }
+.about-bio p span + span { margin-top: .35em; }
