@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&display=swap">
-<link rel="stylesheet" href="styles.css?v=20261101k">
+<link rel="stylesheet" href="styles.css?v=20261101l">
 </head>
 <body>
 
@@ -42,7 +42,7 @@
           <label><span>Last Name</span><input name="last" type="text" autocomplete="family-name" required></label>
         </div>
         <label><span>Business Name</span><input name="business" type="text" autocomplete="organization"></label>
-        <label><span>Instagram Handle</span><input name="ig" type="text" placeholder="@"></label>
+        <label><span>Instagram Handle</span><span class="at-wrap"><span class="at" aria-hidden="true">@</span><input name="ig" type="text" autocapitalize="none" autocorrect="off" spellcheck="false"></span></label>
         <label><span>Email Address</span><input name="email" type="email" autocomplete="email" required></label>
         <label><span>Subject</span><input name="subject" type="text" required></label>
         <label><span>What is your ideal project start date?</span><input name="start" type="text"></label>
@@ -64,13 +64,15 @@
   // opening the visitor's email app with everything filled in.
   var f = document.querySelector('.inquiry'), status = f.querySelector('.inq-status'), btn = f.querySelector('button');
   var v = function (n) { return f[n].value.trim(); };
+  // the @ is already shown in front of the instagram box, so drop any @ people type themselves
+  f.ig.addEventListener('input', function () { var s = f.ig.value.replace(/@/g, ''); if (s !== f.ig.value) f.ig.value = s; });
   f.addEventListener('submit', function (e) {
     e.preventDefault();
     if (v('_honey')) return;
     var name = (v('first') + ' ' + v('last')).trim();
     var data = {
       'first name': v('first'), 'last name': v('last'), 'business name': v('business'),
-      instagram: v('ig'), email: v('email'), subject: v('subject'), 'ideal start date': v('start'),
+      instagram: v('ig') ? '@' + v('ig') : '', email: v('email'), subject: v('subject'), 'ideal start date': v('start'),
       project: v('details'), 'project budget': v('budget'),
       _subject: v('subject') + ' (inquiry from ' + name + ')', _replyto: v('email'), _template: 'table', _captcha: 'false'
     };
