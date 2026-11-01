@@ -491,3 +491,7 @@ a.good:hover .zine-img img { transform: scale(1.03); }
 .c-inquiry .inquiry { gap: 16px; }
 .inq-row { gap: 16px 32px; }
 .inquiry input, .inquiry textarea { padding: 8px 0; }
+/* instagram box: a fixed @ in front so people only type the handle */
+.at-wrap { position: relative; display: block; }
+.at-wrap .at { position: absolute; left: 0; top: 50%; transform: translateY(-50%); font-size: 20px; color: var(--muted); pointer-events: none; }
+.at-wrap input { padding-left: 19px; }
