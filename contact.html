@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>contact · samigxrrero</title>
-<meta name="description" content="Contact Samí Guerrero.">
+<title>connect · samigxrrero</title>
+<meta name="description" content="Connect with Samí Guerrero.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&display=swap">
-<link rel="stylesheet" href="styles.css?v=20261101g">
+<link rel="stylesheet" href="styles.css?v=20261101h">
 </head>
 <body>
 
@@ -18,44 +18,62 @@
   <header class="site-header bar">
     <a class="bar-l" href="about.html">about</a>
     <a class="logo" href="index.html">Samí Guerrero</a>
-    <a class="bar-r" href="contact.html" aria-current="page">contact</a>
+    <a class="bar-r" href="contact.html" aria-current="page">connect</a>
   </header>
 
-  <main class="contact" aria-label="Contact">
-    <h1 class="big">contact</h1>
-    <p class="contact-line">for direction and collaborations, write me.</p>
-    <div class="contact-rows">
-      <div class="contact-row">
-        <p class="label">email</p>
-        <a class="contact-mail" href="mailto:samigxrrero@outlook.com">samigxrrero@outlook.com</a>
-      </div>
-      <div class="contact-row">
-        <p class="label">instagram</p>
-        <a class="contact-mail" href="https://www.instagram.com/samigxrrero" target="_blank" rel="noopener">@samigxrrero</a>
-      </div>
-      <div class="contact-row">
-        <p class="label">youtube</p>
-        <a class="contact-mail" href="https://www.youtube.com/@samigxrrero" target="_blank" rel="noopener">@samigxrrero</a>
-      </div>
-    </div>
-    <form class="inquiry" data-to="samigxrrero@outlook.com">
-      <p class="label">send me an inquiry</p>
-      <input name="name" type="text" placeholder="your name" autocomplete="name" required>
-      <textarea name="message" rows="4" placeholder="what do you have in mind?" required></textarea>
-      <button class="btn" type="submit">send</button>
-    </form>
+  <main class="contact2" aria-label="Contact">
+    <section class="c-direct">
+      <h1 class="big">connect</h1>
+      <p class="contact-line">for direction and collaborations, write me.</p>
+      <a class="c-email" href="mailto:samigxrrero@outlook.com">samigxrrero@outlook.com</a>
+    </section>
+
+    <section class="c-follow" aria-label="Follow along">
+      <p class="label">follow along</p>
+      <a class="c-follow-card" href="https://www.instagram.com/samigxrrero" target="_blank" rel="noopener">
+        <img src="img/about-2.webp" alt="Samí Guerrero" width="2000" height="1333" loading="lazy">
+        <span>@samigxrrero on instagram</span>
+      </a>
+    </section>
+
+    <section class="c-inquiry" aria-label="Inquiry">
+      <p class="label">project inquiry</p>
+      <form class="inquiry" data-to="samigxrrero@outlook.com">
+        <div class="inq-row">
+          <label><span>name</span><input name="name" type="text" autocomplete="name" required></label>
+          <label><span>email</span><input name="email" type="email" autocomplete="email" required></label>
+        </div>
+        <div class="inq-row">
+          <label><span>instagram handle</span><input name="ig" type="text" placeholder="@"></label>
+          <label><span>ideal start date</span><input name="start" type="text" placeholder="month / year"></label>
+        </div>
+        <label><span>budget</span><input name="budget" type="text"></label>
+        <label><span>tell me about your project, the more detail the better</span><textarea name="details" rows="6" required></textarea></label>
+        <button class="btn" type="submit">send inquiry</button>
+        <p class="inq-note">this opens your email app with everything filled in.</p>
+      </form>
+    </section>
   </main>
 
 
 </div>
 <script>
 (function () {
-  // the form opens your email app with the message filled in
+  // the form opens your email app with the answers filled in (no account or server needed)
   var f = document.querySelector('.inquiry');
   f.addEventListener('submit', function (e) {
     e.preventDefault();
-    var subject = 'inquiry from ' + f.name.value.trim();
-    location.href = 'mailto:' + f.dataset.to + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(f.message.value);
+    var v = function (n) { return f[n].value.trim(); };
+    var body = [
+      'name: ' + v('name'),
+      'email: ' + v('email'),
+      'instagram: ' + v('ig'),
+      'ideal start date: ' + v('start'),
+      'budget: ' + v('budget'),
+      '',
+      v('details')
+    ].join('\n');
+    location.href = 'mailto:' + f.dataset.to + '?subject=' + encodeURIComponent('project inquiry from ' + v('name')) + '&body=' + encodeURIComponent(body);
   });
 })();
 </script>
