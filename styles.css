@@ -449,3 +449,6 @@ a.good:hover .zine-img img { transform: scale(1.03); }
 /* header spans a bit wider than the page, like the figma frame (about and contact near the edges) */
 .bar { width: min(1280px, 100vw - 32px); margin-left: calc(50% - min(640px, 50vw - 16px)); padding-left: 0; padding-right: 0; }
 @media (max-width: 560px) { .bar { width: calc(100vw - 32px); margin-left: calc(50% - 50vw + 16px); } }
+/* homepage without the background clip or quote: just the grain, the video and its products */
+.stage { min-height: 0; padding: clamp(40px, 7vh, 96px) 0 clamp(24px, 4vh, 48px); }
+.goods { padding-bottom: clamp(64px, 9vw, 120px); }
