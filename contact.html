@@ -44,6 +44,7 @@
         <label><span>business name</span><input name="business" type="text" autocomplete="organization"></label>
         <label><span>instagram handle</span><input name="ig" type="text" placeholder="@"></label>
         <label><span>email address</span><input name="email" type="email" autocomplete="email" required></label>
+        <label><span>subject</span><input name="subject" type="text" placeholder="what is this about?" required></label>
         <label><span>what is your ideal project start date?</span><input name="start" type="text" placeholder="month / year"></label>
         <label><span>tell me about your project, the more detail the better.</span><textarea name="details" rows="7" required></textarea></label>
         <label><span>what is your project budget?</span><input name="budget" type="text"></label>
@@ -71,10 +72,10 @@
     var name = (v('first') + ' ' + v('last')).trim();
     var data = {
       'first name': v('first'), 'last name': v('last'), 'business name': v('business'),
-      instagram: v('ig'), email: v('email'), 'ideal start date': v('start'),
+      instagram: v('ig'), email: v('email'), subject: v('subject'), 'ideal start date': v('start'),
       project: v('details'), 'project budget': v('budget'),
       'how they heard about you': v('heard'), 'why work with you': v('why'),
-      _subject: 'project inquiry from ' + name, _replyto: v('email'), _template: 'table', _captcha: 'false'
+      _subject: v('subject') + ' (inquiry from ' + name + ')', _replyto: v('email'), _template: 'table', _captcha: 'false'
     };
     btn.disabled = true; btn.textContent = 'sending…'; status.textContent = '';
     fetch('https://formsubmit.co/ajax/' + f.dataset.to, {
