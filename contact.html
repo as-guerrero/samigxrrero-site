@@ -36,7 +36,7 @@
 
     <section class="c-inquiry" aria-label="Inquiry">
       <p class="label inq-title">Project Inquiry Form</p>
-      <form class="inquiry" data-to="samigxrrero@outlook.com">
+      <form class="inquiry">
         <div class="inq-row">
           <label><span>First Name</span><input name="first" type="text" autocomplete="given-name" required></label>
           <label><span>Last Name</span><input name="last" type="text" autocomplete="family-name" required></label>
@@ -59,36 +59,26 @@
 </div>
 <script>
 (function () {
-  // inquiries go straight to sami's inbox through FormSubmit (free, no account; the first one
-  // ever sent asks sami to confirm by email). If that service can't be reached, fall back to
-  // opening the visitor's email app with everything filled in.
+  // the form posts to the site's own /api/inquiry, which emails it to sami (see worker/index.js)
   var f = document.querySelector('.inquiry'), status = f.querySelector('.inq-status'), btn = f.querySelector('button');
   var v = function (n) { return f[n].value.trim(); };
   // the @ is already shown in front of the instagram box, so drop any @ people type themselves
   f.ig.addEventListener('input', function () { var s = f.ig.value.replace(/@/g, ''); if (s !== f.ig.value) f.ig.value = s; });
   f.addEventListener('submit', function (e) {
     e.preventDefault();
-    if (v('_honey')) return;
-    var name = (v('first') + ' ' + v('last')).trim();
-    var data = {
-      'first name': v('first'), 'last name': v('last'), 'business name': v('business'),
-      instagram: v('ig') ? '@' + v('ig') : '', email: v('email'), subject: v('subject'), 'ideal start date': v('start'),
-      project: v('details'), 'project budget': v('budget'),
-      _subject: v('subject') + ' (inquiry from ' + name + ')', _replyto: v('email'), _template: 'table', _captcha: 'false'
-    };
+    var data = {};
+    ['first', 'last', 'business', 'ig', 'email', 'subject', 'start', 'details', 'budget', '_honey'].forEach(function (k) { data[k] = v(k); });
     btn.disabled = true; btn.textContent = 'Sending…'; status.textContent = '';
-    fetch('https://formsubmit.co/ajax/' + f.dataset.to, {
-      method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data)
-    }).then(function (r) { return r.json(); }).then(function (j) {
-      if (String(j.success) !== 'true') throw new Error(j.message || 'not sent');
-      f.reset(); btn.textContent = 'Sent'; status.textContent = 'Thank you, I’ll be in touch.';
-      setTimeout(function () { btn.disabled = false; btn.textContent = 'Send Inquiry'; }, 4000);
-    }).catch(function () {
-      btn.disabled = false; btn.textContent = 'Send Inquiry';
-      var body = Object.keys(data).filter(function (k) { return k.charAt(0) !== '_'; })
-        .map(function (k) { return k + ': ' + data[k]; }).join('\n');
-      location.href = 'mailto:' + f.dataset.to + '?subject=' + encodeURIComponent(data._subject) + '&body=' + encodeURIComponent(body);
-    });
+    fetch('/api/inquiry', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || !j.ok) throw new Error(j.error || r.status); }); })
+      .then(function () {
+        f.reset(); btn.textContent = 'Sent'; status.textContent = 'Thank you, I’ll be in touch.';
+        setTimeout(function () { btn.disabled = false; btn.textContent = 'Send Inquiry'; }, 4000);
+      })
+      .catch(function () {
+        btn.disabled = false; btn.textContent = 'Send Inquiry';
+        status.textContent = 'Something went wrong. Please try again, or email hello@samigxrrero.com.';
+      });
   });
 })();
 </script>
