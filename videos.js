@@ -58,7 +58,7 @@
       clearInterval(timer);
       if (preview) { preview.destroy(); preview = null; }
       frame.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id +
-        '?autoplay=1&rel=0&playsinline=1" title="' + card.querySelector('.vid-meta span').textContent +
+        '?autoplay=1&rel=0&playsinline=1&enablejsapi=1" title="' + card.querySelector('.vid-meta span').textContent +
         '" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
       card.classList.add('playing');
     }
@@ -71,9 +71,14 @@
       new IntersectionObserver(function (entries) {
         entries.forEach(function (en) { seen = en.isIntersecting; sync(); });
       }, { rootMargin: '200px 0px', threshold: 0 }).observe(card);
-      // on the homepage a world that the next one has slid over is still "on screen", so pause it
-      var layer = card.closest('[data-stack]');
-      if (layer) layer.addEventListener('covered', function (e) { covered = e.detail; sync(); });
+      // on the homepage only the video showing between the arrows plays; the hidden ones rest
+      var layer = card.closest('.slide');
+      if (layer) layer.addEventListener('covered', function (e) {
+        covered = e.detail; sync();
+        // a full video playing with sound pauses when you arrow away from it
+        var f = covered && full && frame.querySelector('iframe');
+        if (f) f.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+      });
     } else {
       start();
     }

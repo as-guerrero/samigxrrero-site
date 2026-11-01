@@ -5,30 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>contact · samigxrrero</title>
 <meta name="description" content="Contact Samí Guerrero.">
-<link rel="stylesheet" href="styles.css?v=20261101c">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&display=swap">
+<link rel="stylesheet" href="styles.css?v=20261101d">
 </head>
 <body>
 
 
 <div class="wrap">
 
-  <header class="site-header">
+  <header class="site-header bar">
+    <a class="bar-l" href="about.html">about</a>
     <a class="logo" href="index.html">samigxrrero</a>
-    <nav class="nav" aria-label="Main">
-      <a href="index.html#worlds">worlds</a>
-      <a href="about.html">about</a>
-      <a href="contact.html" aria-current="page">contact</a>
-    </nav>
+    <a class="bar-r" href="contact.html" aria-current="page">contact</a>
   </header>
 
   <main class="contact" aria-label="Contact">
-    <div class="contact-intro">
-      <h1 class="big">contact</h1>
-    </div>
+    <h1 class="big">contact</h1>
     <div class="contact-rows">
       <div class="contact-row">
         <p class="label">email</p>
-        <a class="contact-mail" href="mailto:samigxrrero@outlook.com?subject=Inquiry">samigxrrero@outlook.com</a>
+        <a class="contact-mail" href="mailto:samigxrrero@outlook.com">samigxrrero@outlook.com</a>
       </div>
       <div class="contact-row">
         <p class="label">instagram</p>
@@ -39,10 +37,27 @@
         <a class="contact-mail" href="https://www.youtube.com/@samigxrrero" target="_blank" rel="noopener">@samigxrrero</a>
       </div>
     </div>
+    <form class="inquiry" data-to="samigxrrero@outlook.com">
+      <p class="label">send me an inquiry</p>
+      <input name="name" type="text" placeholder="your name" autocomplete="name" required>
+      <textarea name="message" rows="4" placeholder="what do you have in mind?" required></textarea>
+      <button class="btn" type="submit">send</button>
+    </form>
   </main>
 
 
 </div>
-<script src="site.js?v=20261101c"></script>
+<script>
+(function () {
+  // the form opens your email app with the message filled in
+  var f = document.querySelector('.inquiry');
+  f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var subject = 'inquiry from ' + f.name.value.trim();
+    location.href = 'mailto:' + f.dataset.to + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(f.message.value);
+  });
+})();
+</script>
+<script src="site.js?v=20261101d"></script>
 </body>
 </html>
