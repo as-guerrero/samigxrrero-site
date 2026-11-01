@@ -446,3 +446,6 @@ a.good:hover .zine-img img { transform: scale(1.03); }
 .label { font-size: 15px; letter-spacing: .1em; font-weight: 400; }
 .contact { padding-top: clamp(32px, 5vw, 72px); }
 .inquiry .btn { font-size: 17px; }
+/* header spans a bit wider than the page, like the figma frame (about and contact near the edges) */
+.bar { width: min(1280px, 100vw - 32px); margin-left: calc(50% - min(640px, 50vw - 16px)); padding-left: 0; padding-right: 0; }
+@media (max-width: 560px) { .bar { width: calc(100vw - 32px); margin-left: calc(50% - 50vw + 16px); } }
