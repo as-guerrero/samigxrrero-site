@@ -486,3 +486,8 @@ a.good:hover .zine-img img { transform: scale(1.03); }
 .inquiry { position: relative; }
 .inq-send { display: flex; justify-content: center; width: 100%; margin-top: 8px; }
 .inq-send .btn { align-self: auto; margin: 0; }
+/* inquiry form: regular casing, a little tighter */
+.inq-title { text-transform: none; letter-spacing: .02em; font-size: 20px; color: var(--fg); }
+.c-inquiry .inquiry { gap: 16px; }
+.inq-row { gap: 16px 32px; }
+.inquiry input, .inquiry textarea { padding: 8px 0; }
