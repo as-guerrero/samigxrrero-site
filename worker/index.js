@@ -75,8 +75,10 @@ async function inquiry(req, env) {
   try {
     await env.INQUIRY.send(new EmailMessage(FROM, TO, raw));
   } catch (e) {
-    console.log('send failed', e && e.message);
-    return json({ ok: false, error: 'send failed' }, 502);
+    // Cloudflare's reason (e.g. destination address not verified) shows in the Worker logs and the response
+    const reason = String((e && e.message) || e);
+    console.error('inquiry email failed:', reason);
+    return json({ ok: false, error: 'send failed', reason }, 502);
   }
   return json({ ok: true });
 }

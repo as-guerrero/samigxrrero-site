@@ -12,6 +12,8 @@
   "send_email": [
     { "name": "INQUIRY", "destination_address": "samigxrrero@outlook.com" }
   ],
+  // keeps Worker logs (like a failed form email) visible in the Cloudflare dashboard
+  "observability": { "enabled": true },
   // needed for Cloudflare's preview builds on pull requests
   "previews": {}
 }
