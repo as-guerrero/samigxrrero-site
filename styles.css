@@ -543,3 +543,21 @@ body::after { inset: -160px; will-change: transform; animation: static .8s steps
 /* never let anything push the page sideways on a phone */
 html, body { overflow-x: clip; }
 @supports not (overflow-x: clip) { html { overflow-x: hidden; } }
+
+/* even spacing (2026-11-03): one gap between sections, one gap inside each section.
+   The tree photo's edges fade out, so it is pulled in to make the visible gaps match. */
+.contact2 { --sec: clamp(56px, 8vw, 88px); --in: 20px; gap: var(--sec); }
+.c-email { margin-top: 0; }
+.c-follow { margin-top: -36px; }
+.c-follow-card { gap: 0; }
+.c-handle { margin-top: 8px; }
+.c-follow, .c-inquiry { gap: var(--in); }
+.inq-note { font-size: 18px; }
+.inq-title { margin-top: 0; }
+.c-inquiry .inquiry { margin-top: 0; }
+
+/* about: every sentence sits the same distance apart, paragraphs included */
+.about-bio { line-height: 1.45; }
+.about-bio p { margin: 0 0 .8em; }
+.about-bio p:last-child { margin-bottom: 0; }
+.about-bio p span + span { margin-top: .8em; }
