@@ -487,6 +487,7 @@ a.good:hover .zine-img img { transform: scale(1.03); }
 .inq-send { display: flex; justify-content: center; width: 100%; margin-top: 8px; }
 .inq-send .btn { align-self: auto; margin: 0; }
 /* inquiry form: regular casing, a little tighter */
+.inq-note { margin: 0; max-width: 34em; text-align: center; font-size: 18px; line-height: 1.5; opacity: .75; }
 .inq-title { text-transform: none; letter-spacing: .02em; font-size: 20px; color: var(--fg); }
 .c-inquiry .inquiry { gap: 16px; }
 .inq-row { gap: 16px 32px; }
