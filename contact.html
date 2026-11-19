@@ -12,7 +12,7 @@
 <link rel="icon" href="img/favicon-32.png?v=2" type="image/png" sizes="32x32">
 <link rel="icon" href="favicon.svg?v=2" type="image/svg+xml">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png?v=2">
-<link rel="stylesheet" href="styles.css?v=20261119j">
+<link rel="stylesheet" href="styles.css?v=20261119k">
 </head>
 <body>
 
@@ -84,11 +84,27 @@
     i++;
     if (calm) { i %= N; return show(i, true); }
     show(i);
-    if (i === N) strip.addEventListener('transitionend', function () { i = 0; show(0, true); }, { once: true });
+    // once the slide onto the copy is done (.9s in styles.css), quietly swap back to the real first frame.
+    // a timer, not transitionend, because that event doesn't always fire (background tabs, low power mode)
+    if (i === N) setTimeout(function () { i = 0; show(0, true); }, 950);
   };
   var play = function () { if (!calm && !timer && seen && !document.hidden) timer = setInterval(next, 4000); };
   var stop = function () { clearInterval(timer); timer = null; };
-  vm.addEventListener('click', function () { stop(); next(); play(); });
+  var prev = function () {
+    if (i >= N) return;
+    if (i === 0) { i = N; show(N, true); } // hop onto the copy of the first frame, then slide back to the last
+    i--; show(i, calm);
+  };
+  var go = function (step) { stop(); step(); play(); };
+  vm.addEventListener('click', function () { go(next); });
+  // phones: swipe left for the next photo, right for the one before. Up and down still scroll the page.
+  var x0 = null, y0 = 0;
+  vm.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+  vm.addEventListener('touchend', function (e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) { e.preventDefault(); go(dx < 0 ? next : prev); } // preventDefault stops the tap-to-advance click too
+  });
   vm.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); vm.click(); } });
   // only turn the reel while it's on screen and the tab is open
   new IntersectionObserver(function (es) { seen = es[0].isIntersecting; seen ? play() : stop(); }).observe(vm);
