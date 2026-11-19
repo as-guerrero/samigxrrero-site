@@ -554,9 +554,9 @@ html, body { overflow-x: clip; }
 /* pure black and white, a touch dimmer so it doesn't glare. Edges feather out into the page
    (same mask the old tree photo used) so there's no hard border */
 .vm-frame img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; filter: contrast(1.08) brightness(.88);
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent), linear-gradient(to bottom, transparent, #000 4%, #000 96%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 2%, #000 98%, transparent), linear-gradient(to bottom, transparent, #000 1.5%, #000 98.5%, transparent);
   -webkit-mask-composite: source-in;
-          mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent), linear-gradient(to bottom, transparent, #000 4%, #000 96%, transparent);
+          mask-image: linear-gradient(to right, transparent, #000 2%, #000 98%, transparent), linear-gradient(to bottom, transparent, #000 1.5%, #000 98.5%, transparent);
           mask-composite: intersect; }
 @media (prefers-reduced-motion: reduce) { .vm-strip { transition: none; } }
 .c-follow-card .c-handle { margin-top: 0; }
