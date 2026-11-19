@@ -550,13 +550,10 @@ html, body { overflow-x: clip; }
    slides the strip one frame over. Only transform animates, so it stays smooth. */
 .vm { width: min(100%, 340px); overflow: hidden; cursor: pointer; -webkit-tap-highlight-color: transparent; outline-offset: 6px; }
 .vm-strip { display: flex; transition: transform .45s cubic-bezier(.6, 0, .2, 1); will-change: transform; }
-.vm-frame { flex: 0 0 100%; margin: 0; padding: 26px 14px; position: relative; background-color: #171512;
-  /* sprocket holes along both edges, edge print just inside the bottom row */
+.vm-frame { flex: 0 0 100%; margin: 0; padding: 16px 0;
+  /* a thin row of sprocket holes above and below; the photo itself is shown as is, edge to edge */
   background-image: repeating-linear-gradient(90deg, #cfc9bd 0 9px, transparent 9px 18px), repeating-linear-gradient(90deg, #cfc9bd 0 9px, transparent 9px 18px);
-  background-size: calc(100% - 28px) 6px; background-repeat: no-repeat; background-position: 14px 7px, 14px calc(100% - 7px); }
-.vm-frame img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; background: #0c0c0c; }
-.vm-frame span { position: absolute; bottom: 14px; font-size: 9px; line-height: 1; letter-spacing: .14em; color: #c98a3c; opacity: .75; }
-.vm-frame .vm-mark { left: 16px; }
-.vm-frame .vm-no { right: 16px; }
+  background-size: 100% 5px; background-repeat: no-repeat; background-position: 0 0, 0 100%; }
+.vm-frame img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; filter: contrast(1.08) brightness(.88); } /* pure black and white, slightly dimmed so it sits in the page rather than glowing */
 @media (prefers-reduced-motion: reduce) { .vm-strip { transition: none; } }
 .c-follow-card .c-handle { margin-top: 0; }
