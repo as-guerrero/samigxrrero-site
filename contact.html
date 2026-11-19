@@ -12,7 +12,7 @@
 <link rel="icon" href="img/favicon-32.png?v=2" type="image/png" sizes="32x32">
 <link rel="icon" href="favicon.svg?v=2" type="image/svg+xml">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png?v=2">
-<link rel="stylesheet" href="styles.css?v=20261103b">
+<link rel="stylesheet" href="styles.css?v=20261119c">
 </head>
 <body>
 
@@ -32,14 +32,11 @@
     </section>
 
     <section class="c-follow" aria-label="Instagram">
-      <a class="c-follow-card" href="https://www.instagram.com/samigxrrero" target="_blank" rel="noopener">
-        <img class="c-still" src="img/connect-trees.webp" alt="Trees against the sky, black and white" width="1040" height="1040" loading="lazy">
-        <span class="c-handle">@samigxrrero</span>
-      </a>
+      <div class="vm" role="button" tabindex="0" aria-label="Photo viewer, press for the next frame"><div class="vm-strip"></div></div>
+      <a class="c-follow-card" href="https://www.instagram.com/samigxrrero" target="_blank" rel="noopener"><span class="c-handle">@samigxrrero</span></a>
     </section>
 
     <section class="c-inquiry" aria-label="Inquiry">
-      <p class="inq-note">Available for photography and videography projects, creative collaborations, and commissioned work.</p>
       <p class="label inq-title">Project Inquiry Form</p>
       <form class="inquiry">
         <div class="inq-row">
@@ -62,6 +59,35 @@
 
 
 </div>
+<script>
+(function () {
+  // view-master: 38 stills in img/viewmaster (01.webp ... 38.webp). Add a still: drop in 39.webp and bump N.
+  var N = 38, vm = document.querySelector('.vm'), strip = vm.firstChild, i = 0, timer = null, seen = false;
+  var calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  for (var k = 1; k <= N; k++) {
+    var n = (k < 10 ? '0' : '') + k;
+    strip.insertAdjacentHTML('beforeend', '<figure class="vm-frame"><img alt="" width="480" height="600" decoding="async" data-src="img/viewmaster/' + n + '.webp"><span class="vm-mark">SG 400</span><span class="vm-no">' + k + 'A</span></figure>');
+  }
+  var imgs = strip.querySelectorAll('img');
+  // only fetch the frame showing and the one after it
+  var load = function (n) { var im = imgs[n % N]; if (im.dataset.src) { im.src = im.dataset.src; delete im.dataset.src; } };
+  var show = function (n, jump) {
+    if (jump) strip.style.transition = 'none';
+    strip.style.transform = 'translateX(' + (-100 * n) + '%)';
+    if (jump) { strip.offsetWidth; strip.style.transition = ''; }
+    load(n); load(n + 1);
+  };
+  var next = function () { i = (i + 1) % N; show(i, i === 0); };
+  var play = function () { if (!calm && !timer && seen && !document.hidden) timer = setInterval(next, 3500); };
+  var stop = function () { clearInterval(timer); timer = null; };
+  vm.addEventListener('click', function () { stop(); next(); play(); });
+  vm.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); vm.click(); } });
+  // only turn the reel while it's on screen and the tab is open
+  new IntersectionObserver(function (es) { seen = es[0].isIntersecting; seen ? play() : stop(); }).observe(vm);
+  document.addEventListener('visibilitychange', function () { document.hidden ? stop() : play(); });
+  show(0);
+})();
+</script>
 <script>
 (function () {
   // the form posts to the site's own /api/inquiry, which emails it to sami (see worker/index.js)
