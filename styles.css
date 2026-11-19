@@ -549,7 +549,7 @@ html, body { overflow-x: clip; }
 /* connect: view-master. One film-negative frame at a time; a tap (or every few seconds)
    slides the strip one frame over. Only transform animates, so it stays smooth. */
 .vm { width: min(100%, 340px); overflow: hidden; cursor: pointer; -webkit-tap-highlight-color: transparent; outline-offset: 6px; }
-.vm-strip { display: flex; transition: transform .45s cubic-bezier(.6, 0, .2, 1); will-change: transform; }
+.vm-strip { display: flex; transition: transform .9s cubic-bezier(.65, 0, .35, 1); will-change: transform; }
 .vm-frame { flex: 0 0 100%; margin: 0; }
 /* pure black and white, a touch dimmer so it doesn't glare. Edges feather out into the page
    (same mask the old tree photo used) so there's no hard border */

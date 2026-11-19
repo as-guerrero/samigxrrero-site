@@ -12,7 +12,7 @@
 <link rel="icon" href="img/favicon-32.png?v=2" type="image/png" sizes="32x32">
 <link rel="icon" href="favicon.svg?v=2" type="image/svg+xml">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png?v=2">
-<link rel="stylesheet" href="styles.css?v=20261119i">
+<link rel="stylesheet" href="styles.css?v=20261119j">
 </head>
 <body>
 
@@ -61,13 +61,15 @@
 </div>
 <script>
 (function () {
-  // view-master: 11 stills in img/viewmaster (01.webp ... 38.webp). Add a still: drop in 12.webp (3:4, 600x800) and bump N.
+  // view-master: 11 stills in img/viewmaster (01.webp ... 11.webp). Add a still: drop in 12.webp (3:4, 600x800) and bump N.
   var N = 11, vm = document.querySelector('.vm'), strip = vm.firstChild, i = 0, timer = null, seen = false;
   var calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
   for (var k = 1; k <= N; k++) {
     var n = (k < 10 ? '0' : '') + k;
     strip.insertAdjacentHTML('beforeend', '<figure class="vm-frame"><img alt="" width="600" height="800" decoding="async" data-src="img/viewmaster/' + n + '.webp"></figure>');
   }
+  // a copy of the first frame at the end, so the last photo slides on into the first instead of rewinding
+  strip.insertAdjacentHTML('beforeend', '<figure class="vm-frame" aria-hidden="true"><img alt="" width="600" height="800" decoding="async" src="img/viewmaster/01.webp"></figure>');
   var imgs = strip.querySelectorAll('img');
   // only fetch the frame showing and the next two, so a slide never lands on an empty frame
   var load = function (n) { var im = imgs[n % N]; if (im.dataset.src) { im.src = im.dataset.src; delete im.dataset.src; } };
@@ -77,8 +79,14 @@
     if (jump) { strip.offsetWidth; strip.style.transition = ''; }
     load(n); load(n + 1); load(n + 2);
   };
-  var next = function () { i = (i + 1) % N; show(i, i === 0); };
-  var play = function () { if (!calm && !timer && seen && !document.hidden) timer = setInterval(next, 3500); };
+  var next = function () {
+    if (i >= N) return; // still sliding onto the copy
+    i++;
+    if (calm) { i %= N; return show(i, true); }
+    show(i);
+    if (i === N) strip.addEventListener('transitionend', function () { i = 0; show(0, true); }, { once: true });
+  };
+  var play = function () { if (!calm && !timer && seen && !document.hidden) timer = setInterval(next, 4000); };
   var stop = function () { clearInterval(timer); timer = null; };
   vm.addEventListener('click', function () { stop(); next(); play(); });
   vm.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); vm.click(); } });
