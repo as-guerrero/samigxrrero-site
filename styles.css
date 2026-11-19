@@ -335,7 +335,7 @@ a.row:hover { background: #141414; padding-left: 16px; }
 /* header stays visible while scrolling */
 .site-header { position: sticky; top: 0; z-index: 20; }
 /* full-width band behind the header without widening the page (shadow + clip trick) */
-.site-header::before { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%); z-index: -1; background: rgba(11, 11, 11, .82); }
+.site-header::before { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%); z-index: -1; background: var(--bg); } /* solid, so page text never shows through while scrolling */
 
 /* back to top: shows up once you've scrolled down a long page */
 .to-top { position: fixed; right: clamp(16px, 3vw, 32px); bottom: clamp(16px, 3vw, 32px); z-index: 30; min-height: 44px; padding: 0 18px; border: 1px solid rgba(232, 232, 230, .5); background: rgba(11, 11, 11, .92); color: var(--fg); font: inherit; font-size: 13px; cursor: pointer; opacity: 0; pointer-events: none; transition: opacity .4s ease, border-color .4s ease; }
