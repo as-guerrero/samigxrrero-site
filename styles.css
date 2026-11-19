@@ -554,10 +554,6 @@ html, body { overflow-x: clip; }
   /* a thin row of sprocket holes above and below; the photo itself is shown as is, edge to edge */
   background-image: repeating-linear-gradient(90deg, #cfc9bd 0 9px, transparent 9px 18px), repeating-linear-gradient(90deg, #cfc9bd 0 9px, transparent 9px 18px);
   background-size: 100% 5px; background-repeat: no-repeat; background-position: 0 0, 0 100%; }
-.vm-frame img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; filter: sepia(.35) contrast(1.08) brightness(.88); }
-/* burnt into the page: scorched brown edges that fade to the page color, drawn once per frame (no animation) */
-.vm-frame { position: relative; }
-.vm-frame::after { content: ""; position: absolute; inset: 16px 0; pointer-events: none;
-  background: radial-gradient(ellipse 72% 68% at 50% 50%, transparent 52%, rgba(74, 38, 12, .45) 74%, rgba(28, 14, 6, .85) 90%, #0b0b0b 100%); }
+.vm-frame img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; filter: sepia(.35) contrast(1.08) brightness(.88); } /* warm, slightly dimmed: burnt in rather than bright white */
 @media (prefers-reduced-motion: reduce) { .vm-strip { transition: none; } }
 .c-follow-card .c-handle { margin-top: 0; }
