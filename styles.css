@@ -554,6 +554,6 @@ html, body { overflow-x: clip; }
   /* a thin row of sprocket holes above and below; the photo itself is shown as is, edge to edge */
   background-image: repeating-linear-gradient(90deg, #cfc9bd 0 9px, transparent 9px 18px), repeating-linear-gradient(90deg, #cfc9bd 0 9px, transparent 9px 18px);
   background-size: 100% 5px; background-repeat: no-repeat; background-position: 0 0, 0 100%; }
-.vm-frame img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; filter: sepia(.35) contrast(1.08) brightness(.88); } /* warm, slightly dimmed: burnt in rather than bright white */
+.vm-frame img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; filter: contrast(1.08) brightness(.88); } /* pure black and white, slightly dimmed so it sits in the page rather than glowing */
 @media (prefers-reduced-motion: reduce) { .vm-strip { transition: none; } }
 .c-follow-card .c-handle { margin-top: 0; }
