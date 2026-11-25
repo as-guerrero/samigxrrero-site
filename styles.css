@@ -546,17 +546,11 @@ html, body { overflow-x: clip; }
 .about-bio p:last-child { margin-bottom: 0; }
 .about-bio p span + span { margin-top: .8em; }
 
-/* connect: view-master. One film-negative frame at a time; a tap (or every few seconds)
-   slides the strip one frame over. Only transform animates, so it stays smooth. */
-.vm { width: min(100%, 340px); overflow: hidden; cursor: pointer; touch-action: pan-y; -webkit-tap-highlight-color: transparent; outline-offset: 6px; }
-.vm-strip { display: flex; transition: transform .9s cubic-bezier(.65, 0, .35, 1); will-change: transform; }
-.vm-frame { flex: 0 0 100%; margin: 0; }
-/* pure black and white, a touch dimmer so it doesn't glare. Edges feather out into the page
-   (same mask the old tree photo used) so there's no hard border */
-.vm-frame img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; filter: contrast(1.08) brightness(.88);
+/* connect: one still photo of the buildings, black and white, a touch dimmer so it doesn't glare.
+   Edges feather out into the page so there's no hard border */
+.c-photo { display: block; width: min(100%, 340px); height: auto; aspect-ratio: 3 / 4; filter: contrast(1.08) brightness(.88);
   -webkit-mask-image: linear-gradient(to right, transparent, #000 2%, #000 98%, transparent), linear-gradient(to bottom, transparent, #000 1.5%, #000 98.5%, transparent);
   -webkit-mask-composite: source-in;
           mask-image: linear-gradient(to right, transparent, #000 2%, #000 98%, transparent), linear-gradient(to bottom, transparent, #000 1.5%, #000 98.5%, transparent);
           mask-composite: intersect; }
-@media (prefers-reduced-motion: reduce) { .vm-strip { transition: none; } }
 .c-follow-card .c-handle { margin-top: 0; }
